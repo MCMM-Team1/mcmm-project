@@ -4,3 +4,4 @@ necessary: discretization (clustering), estimation, and analysis of the resultin
 """
 
 from . import example
+from . import msm
