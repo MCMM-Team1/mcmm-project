@@ -1,3 +1,5 @@
+import numpy as np
+
 def slidingWindowCount(traj,tau):
     """
     returns the countmatrix, gets a trajectory and tau
