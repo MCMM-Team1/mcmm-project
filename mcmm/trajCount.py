@@ -15,7 +15,7 @@ def slidingWindowCount(traj,tau):
     Countmatrix: matrixlike
     ------
     """
-    n = np.max(traj)+ 1
+    n = int(np.max(traj)+ 1)
     Countmatrix = np.zeros((n,n))
     T = len(traj) 
     
