@@ -81,7 +81,7 @@ class MSM(object):
 	
 	
     def __init__(self,P):
-        if(not self.checkStochasticMatrix(P)):
+        if(not checkStochasticMatrix(P)):
             raise Exception("error: the given matrix t is not stochastic!")
         else:
             self.transition_matrix = P
@@ -141,8 +141,9 @@ class MSM(object):
         cax.set_frame_on(False)
         plt.colorbar(orientation='vertical')
         
-        return plt.show()
-    def checkStochasticMatrix(t):
+        return plt.show(
+        	
+ def checkStochasticMatrix(t):
         
         """
         checks if the given matrix t is row stochastic
