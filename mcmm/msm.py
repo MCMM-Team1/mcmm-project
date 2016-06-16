@@ -143,22 +143,22 @@ class MSM(object):
         
         return plt.show()
         	
- def checkStochasticMatrix(t):
+def checkStochasticMatrix(t):
         
-        """
-        checks if the given matrix t is row stochastic
-         
-        Paramters
-        ---------
-        t : matrix
-        
-        Return
-        ------
-        result : true if t is a row stochastic matrix, false otherwise
-        """
-        numrows = len(t)
-        result = True
-        for i in range(numrows):
-            result &= (t.sum(axis=1)==1)
-        return result
+    """
+    checks if the given matrix t is row stochastic
+     
+    Paramters
+    ---------
+    t : matrix
+    
+    Return
+    ------
+    result : true if t is a row stochastic matrix, false otherwise
+    """
+    numrows = len(t)
+    result = True
+    for i in range(numrows):
+        result &= (t.sum(axis=1)==1)
+    return result
   
