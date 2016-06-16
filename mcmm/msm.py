@@ -82,9 +82,9 @@ class msm(object):
         """Initial step: Checks if the matrix is stochastic and quadratic"""
         for i in range(len(P[0])):
             if (abs(np.sum(P[i])-1>1.0E-8)):
-                print "Not stochastic"
+                print ("Not stochastic")
         if (len(P[0])!=len(P[1])):
-            print "Not quadratic"
+            print ("Not quadratic")
     
     
     def eigAnalysis(self,P):
