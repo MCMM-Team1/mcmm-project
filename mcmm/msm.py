@@ -81,7 +81,7 @@ class MSM(object):
 	
 	
     def __init__(self,P):
-        if(not checkStochasticMatrix(P)):
+        if(not self.checkStochasticMatrix(P)):
             raise Exception("error: the given matrix t is not stochastic!")
         else:
             self.transition_matrix = P
