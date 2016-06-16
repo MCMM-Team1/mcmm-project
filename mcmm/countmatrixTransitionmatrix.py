@@ -1,5 +1,6 @@
 # here come the nonrevTmatrix(matrix count) and revTmatrix(matrix count) functions
 import numpy as np
+import mcmm
 def revTmatrix(t):
     guess=t / np.sum(t,1)[:,None]
     stat=mcmm.msm(guess)
