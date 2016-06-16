@@ -77,53 +77,61 @@ def kosaraju(T):
 			V.remove(i)
 	return CC
 
-class msm(object):  
+class MSM(object):  
 	
 	
     def __init__(self,P):
-        """Initial step: Checks if the matrix is stochastic and quadratic"""
-        for i in range(len(P[0])):
-            if (abs(np.sum(P[i])-1>1.0E-8)):
-                print ("Not stochastic")
-        if (len(P[0])!=len(P[1])):
-            print ("Not quadratic")
-        self.P = P
+        if(not checkStochasticMatrix(P)):
+            raise Exception("error: the given matrix t is not stochastic!")
+        else:
+            self.transition_matrix = P
+	    self._eigvalues = None
+            self._lefteigvectors = None
+            self._righteigvectors = None
+            self._stationary = None  
+    @property
+    def stationary(self):
+        if self._stationary is None:
+            eigvalue,eigvector =  alg.eig(self.transition_matrix,left = True,right = False)
+            index = np.argmax(eigvalue)
+            sol = eigvector[:,index]
+            summe = sum(sol)
+            self._stationary = sol/summe
+        return self._stationary
+    
+    @property
+    def eigvalues(self):
+        if self._eigvalues is None:
+            eigvalue,eigvector =  alg.eig(self.transition_matrix,left = True,right = False)
+            self._eigvalues = eigvalue
+        return self._eigvalues
+    
+    
+    @property
+    def lefteigvectors(self):
+        if self._lefteigvectors is None:
+            eigvalue,eigvector =  alg.eig(self.transition_matrix,left = True,right = False)
+            self._lefteigvectors = eigvectors
+        return self._lefteigvectors
+    
+    @property
+    def righteigvectors(self):
+        if self._righteigvectors is None:
+            eigvalue,eigvector =  alg.eig(self.transition_matrix,left = False,right = True)
+            self._righteigvectors = eigvectors
+        return self._righteigvectors
     
     def pcca(self, numstates):
-    	return _pcca(self.P , numstates)
+    	return _pcca(self.transition_matrix , numstates)
     
-    def eigAnalysis(self,P):
-        """Calculates eigenvalus and eigevectors both right and left.
-        
-        Input: Stochastic (int(n),int(n)) matrix.
-        
-        Output: Array with eigenvalus sorted in descending order.
-                Left and right eigenvectors normlaized in the 2-norm v[:,i].
-                Stationary distribution as probability distribution as an array."""
-        eigval , eigvec_right , eigvec_left = scipy.linalg.eig(P,left=True,right=True)
-
-        eigval = np.real(eigval)
-        eigvec_right = np.real(eigvec_right)
-        eigvec_left = np.real(eigvec_left)
-
-        idx = np.argsort(abs(eigval))[::-1]
-
-        eigval = eigval[idx]
-        eigvec_left = eigvec_left[:,idx]
-        eigvec_right = eigvec_right[:,idx]
-        
-        self.eigval = eigval
-        self.eigvec_left = eigvec_left 
-        self.eigvec_right = eigvec_right
-        self.stationary = eigvec_right[:,0]/np.sum(eigvec_right[:,0])
-        return self
     
-    def visualizeMatrix(self,P):
+    
+    def visualizeMatrix(self):
         """Plots the transition matrix as a 2D plot"""
         fig = plt.figure(figsize=(6, 3.2))
         ax = fig.add_subplot(111)
         ax.set_title('colorMap')
-        plt.imshow(P)
+        plt.imshow(self.transition_matrix)
         ax.set_aspect('equal')
 
         cax = fig.add_axes([0.12, 0.1, 0.78, 0.8])
@@ -134,3 +142,22 @@ class msm(object):
         plt.colorbar(orientation='vertical')
         
         return plt.show()
+    def checkStochasticMatrix(t):
+        
+        """
+        checks if the given matrix t is row stochastic
+         
+        Paramters
+        ---------
+        t : matrix
+        
+        Return
+        ------
+        result : true if t is a row stochastic matrix, false otherwise
+        """
+        numrows = len(t)
+        result = True
+        for i in range(numrows):
+            result &= (t.sum(axis=1)==1)
+        return result
+  

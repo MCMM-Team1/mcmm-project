@@ -4,7 +4,6 @@ import mcmm
 def revTmatrix(t):
     guess=t / np.sum(t,1)[:,None]
     stat=mcmm.msm.MSM(guess)
-    stat.eigAnalysis(guess)
     pi=stat.stationary
     x=np.zeros([len(t),len(t)])
     xold=x
