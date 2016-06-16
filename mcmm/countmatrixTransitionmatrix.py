@@ -2,7 +2,7 @@
 import numpy as np
 def revTmatrix(t):
     guess=t / np.sum(t,1)[:,None]
-    stat=MCMM(guess)
+    stat=mcmm.msm(guess)
     stat.eigAnalysis(guess)
     pi=stat.stationary
     x=np.zeros([len(t),len(t)])
