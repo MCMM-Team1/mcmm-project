@@ -141,7 +141,7 @@ class MSM(object):
         cax.set_frame_on(False)
         plt.colorbar(orientation='vertical')
         
-        return plt.show(
+        return plt.show()
         	
  def checkStochasticMatrix(t):
         
