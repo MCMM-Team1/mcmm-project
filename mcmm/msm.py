@@ -1,7 +1,7 @@
 import numpy as np
 import scipy.linalg 
 import matplotlib.pyplot as plt
-
+from msmtools.analysis import pcca as _pcca
 
 
 def DFS(D,v,E,label = []):
@@ -78,6 +78,8 @@ def kosaraju(T):
 	return CC
 
 class msm(object):  
+	
+	
     def __init__(self,P):
         """Initial step: Checks if the matrix is stochastic and quadratic"""
         for i in range(len(P[0])):
@@ -85,7 +87,10 @@ class msm(object):
                 print ("Not stochastic")
         if (len(P[0])!=len(P[1])):
             print ("Not quadratic")
+        self.P = P
     
+    def pcca(self, numstates):
+    	return _pcca(self.P , numstates)
     
     def eigAnalysis(self,P):
         """Calculates eigenvalus and eigevectors both right and left.
