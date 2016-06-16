@@ -85,7 +85,7 @@ class MSM(object):
             raise Exception("error: the given matrix t is not stochastic!")
         else:
             self.transition_matrix = P
-	    self._eigvalues = None
+            self._eigvalues = None
             self._lefteigvectors = None
             self._righteigvectors = None
             self._stationary = None  
