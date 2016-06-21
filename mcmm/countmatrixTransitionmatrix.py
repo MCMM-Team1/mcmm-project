@@ -16,10 +16,15 @@ def revTmatrix(t):
             for j in range(len(t)):
                 x[i,j]=(t[i,j]+t[j,i])/(np.sum(t,1)/np.sum(xold,1)+np.sum(t,0),np.sum(xold,0))
         delta=np.sum(abs(x-xold))
-    print (x)
+    #print (x)
     t=x/ np.sum(x,1)[:,None]
     return t
 
 def nonrevTmatrix(t):
-    t=t / np.sum(t,1)[:,None]
+    for i in range(len(t)):
+        var = 0
+        for j in range(len(t)):
+            var = var + t[i][j]
+        for j in range(len(t)):
+            t[i][j] = t[i][j] / var
     return t

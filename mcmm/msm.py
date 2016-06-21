@@ -1,5 +1,5 @@
 import numpy as np
-import scipy.linalg 
+import scipy.linalg as alg
 import matplotlib.pyplot as plt
 from msmtools.analysis import pcca as _pcca
 
@@ -92,7 +92,7 @@ class MSM(object):
     @property
     def stationary(self):
         if self._stationary is None:
-            eigvalue,eigvector =  alg.eig(self.transition_matrix,left = True,right = False)
+            eigvalue,eigvector = alg.eig(self.transition_matrix,left = True,right = False)
             index = np.argmax(eigvalue)
             sol = eigvector[:,index]
             summe = sum(sol)
@@ -156,9 +156,20 @@ def checkStochasticMatrix(t):
     ------
     result : true if t is a row stochastic matrix, false otherwise
     """
+    print(t)
     numrows = len(t)
-    result = True
     for i in range(numrows):
-        result &= (t.sum(axis=1)==1)
-    return result
+        print(t.sum(axis=1)[i])
+        if (t.sum(axis=1)[i] > 1.0000001 or t.sum(axis=1)[i] < 0.999999):
+            print("if fall")
+            print(t.sum(axis=1)[i])
+            return False
+    return True
   
+
+
+
+
+
+
+
