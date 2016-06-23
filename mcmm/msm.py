@@ -77,6 +77,25 @@ def kosaraju(T):
 			V.remove(i)
 	return CC
 
+def findLargestCommClass(T):
+	"""
+	Calls kosaraju and finds the largest communication class of the transition matrix T
+	
+	Parameters
+	----------
+	T: matrixlike, i.e list of lists
+	----------
+	
+	Return
+	------
+	Largeset communication classes of T
+	------
+	"""
+	
+	classes = kosaraju(T)
+	return max(classes, key=lambda coll: len(coll)) #returns the first maximum communication class
+	
+
 class MSM(object):  
 	
 	
