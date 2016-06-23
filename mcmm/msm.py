@@ -175,10 +175,8 @@ def checkStochasticMatrix(t):
     ------
     result : true if t is a row stochastic matrix, false otherwise
     """
-    print(t)
     numrows = len(t)
     for i in range(numrows):
-        print(t.sum(axis=1)[i])
         if (t.sum(axis=1)[i] > 1.0000001 or t.sum(axis=1)[i] < 0.999999):
             print("if fall")
             print(t.sum(axis=1)[i])

@@ -25,7 +25,7 @@ def determineStep(vec,prob):
         k+=1
     return k-1
 
-def test_(non)revTmatrix(tolerance = 0.05):
+def test_revAndNonrevTmatrix(tolerance = 0.05):
     # test 1: create countmatrix by scaling 
     t1 = np.array([[0.853 , 0.147 , 0 , 0],[0.132 , 0.868 , 0 , 0],[0 , 0 , 0.8 , 0.2],[0 , 0 , 0.2 , 0.8]])
     t2 = np.array([[0.5 , 0.5],[0 , 1]])
@@ -40,8 +40,9 @@ def test_(non)revTmatrix(tolerance = 0.05):
     c5 = 10000 * t5
     
     #non reversible
-    print(t1)
-    print(mcmm.countmatrixTransitionmatrix.nonrevTmatrix(c1))
+    #print(t1)
+    
+    #print(mcmm.countmatrixTransitionmatrix.nonrevTmatrix(c1))
     assert_true(checkTolerance(t1,mcmm.countmatrixTransitionmatrix.nonrevTmatrix(c1),tolerance))
     assert_true(checkTolerance(t2,mcmm.countmatrixTransitionmatrix.nonrevTmatrix(c2),tolerance))
     assert_true(checkTolerance(t3,mcmm.countmatrixTransitionmatrix.nonrevTmatrix(c3),tolerance))
@@ -51,12 +52,12 @@ def test_(non)revTmatrix(tolerance = 0.05):
     #reversible
     #print(t1)
     #print(mcmm.countmatrixTransitionmatrix.revTmatrix(c1))
+    
     assert_true(checkTolerance(t1,mcmm.countmatrixTransitionmatrix.revTmatrix(c1),tolerance))
     assert_true(checkTolerance(t2,mcmm.countmatrixTransitionmatrix.revTmatrix(c2),tolerance))
     assert_true(checkTolerance(t3,mcmm.countmatrixTransitionmatrix.revTmatrix(c3),tolerance))
     assert_true(checkTolerance(t4,mcmm.countmatrixTransitionmatrix.revTmatrix(c4),tolerance))
     assert_true(checkTolerance(t5,mcmm.countmatrixTransitionmatrix.revTmatrix(c5),tolerance))
-    
     
     # test 2: create trajectoy from a irreducible transition matrix,
     # calculate the count matrix and check the transitionmatrix obtained
