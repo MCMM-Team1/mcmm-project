@@ -161,7 +161,23 @@ class MSM(object):
         plt.colorbar(orientation='vertical')
         
         return plt.show()
-        	
+        
+    def visualizeEigvalues(self):
+        """Plots the 10 biggest Eigenvalues"""
+        n=len(self.eigvalues)
+        if len(self.eigvalues)>10:
+            n=10
+        else:
+            n=len(self.eigvalues)
+        sorteig=np.sort(self.eigvalues)[::-1]   
+        plt.bar(np.arange(n)+0.75,sorteig[:n],0.5)
+        plt.xticks(np.arange(n)+1)
+        plt.xlabel(r'Index i')
+        plt.ylabel(r'Eigenvalue $\lambda_i$')
+        plt.title(r'Eigenvalues')
+        return plt.show()	
+        
+        
 def checkStochasticMatrix(t):
         
     """
