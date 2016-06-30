@@ -174,6 +174,7 @@ class MSM(object):
         plt.xlabel(r'Index i')
         plt.ylabel(r'Eigenvalue $\lambda_i$')
         plt.title(r'Eigenvalues')
+        plt.ylim(0,1.05)
         return plt.show()	
         
         
