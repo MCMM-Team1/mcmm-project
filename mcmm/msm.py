@@ -164,7 +164,6 @@ class MSM(object):
         
     def visualizeEigvalues(self):
         """Plots the 10 biggest Eigenvalues"""
-        n=len(self.eigvalues)
         if len(self.eigvalues)>10:
             n=10
         else:
