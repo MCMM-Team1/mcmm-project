@@ -161,7 +161,22 @@ class MSM(object):
         plt.colorbar(orientation='vertical')
         
         return plt.show()
-        	
+        
+    def visualizeEigvalues(self):
+        """Plots the 10 biggest Eigenvalues"""
+        if len(self.eigvalues)>10:
+            n=10
+        else:
+            n=len(self.eigvalues)
+        sorteig=np.sort(self.eigvalues)[::-1]   
+        plt.bar(np.arange(n)+0.75,sorteig[:n],0.5)
+        plt.xticks(np.arange(n)+1)
+        plt.xlabel(r'Index i')
+        plt.ylabel(r'Eigenvalue $\lambda_i$')
+        plt.title(r'Eigenvalues')
+        return plt.show()	
+        
+        
 def checkStochasticMatrix(t):
         
     """
@@ -175,10 +190,8 @@ def checkStochasticMatrix(t):
     ------
     result : true if t is a row stochastic matrix, false otherwise
     """
-    print(t)
     numrows = len(t)
     for i in range(numrows):
-        print(t.sum(axis=1)[i])
         if (t.sum(axis=1)[i] > 1.0000001 or t.sum(axis=1)[i] < 0.999999):
             print("if fall")
             print(t.sum(axis=1)[i])
