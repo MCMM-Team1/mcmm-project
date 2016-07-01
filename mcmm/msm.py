@@ -122,6 +122,8 @@ class MSM(object):
     def eigvalues(self):
         if self._eigvalues is None:
             eigvalue,eigvectors =  alg.eig(self.transition_matrix,left = True,right = False)
+            idx = np.argsort(abs(eigvalue))[::-1]
+            eigvalue = eigvalue[idx]
             self._eigvalues = eigvalue
         return self._eigvalues
     
@@ -130,6 +132,8 @@ class MSM(object):
     def lefteigvectors(self):
         if self._lefteigvectors is None:
             eigvalue,eigvectors =  alg.eig(self.transition_matrix,left = True,right = False)
+            idx = np.argsort(abs(eigvalue))[::-1]
+            eigvectors = eigvectors[:,idx]
             self._lefteigvectors = eigvectors
         return self._lefteigvectors
     
@@ -137,6 +141,8 @@ class MSM(object):
     def righteigvectors(self):
         if self._righteigvectors is None:
             eigvalue,eigvectors =  alg.eig(self.transition_matrix,left = False,right = True)
+            idx = np.argsort(abs(eigvalue))[::-1]
+            eigvectors = eigvectors[:,idx]
             self._righteigvectors = eigvectors
         return self._righteigvectors
     
