@@ -175,7 +175,15 @@ class MSM(object):
         plt.ylabel(r'Eigenvalue $\lambda_i$')
         plt.title(r'Eigenvalues')
         plt.ylim(0,1.05)
-        return plt.show()	
+        return plt.show()
+        
+    def visualizeStationary(self):
+        plt.bar(np.arange(len(self.stationary))+0.75,a.stationary,0.5)
+        plt.xticks(np.arange(len(self.stationary))+1)
+        plt.title(r'Stationary Distribution')
+        plt.xlabel(r'index of states')
+        plt.ylabel(r'probability')
+        return plt.show()
         
         
 def checkStochasticMatrix(t):
