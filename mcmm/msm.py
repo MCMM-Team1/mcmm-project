@@ -121,7 +121,7 @@ class MSM(object):
     @property
     def eigvalues(self):
         if self._eigvalues is None:
-            eigvalue,eigvector =  alg.eig(self.transition_matrix,left = True,right = False)
+            eigvalue,eigvectors =  alg.eig(self.transition_matrix,left = True,right = False)
             self._eigvalues = eigvalue
         return self._eigvalues
     
@@ -129,14 +129,14 @@ class MSM(object):
     @property
     def lefteigvectors(self):
         if self._lefteigvectors is None:
-            eigvalue,eigvector =  alg.eig(self.transition_matrix,left = True,right = False)
+            eigvalue,eigvectors =  alg.eig(self.transition_matrix,left = True,right = False)
             self._lefteigvectors = eigvectors
         return self._lefteigvectors
     
     @property
     def righteigvectors(self):
         if self._righteigvectors is None:
-            eigvalue,eigvector =  alg.eig(self.transition_matrix,left = False,right = True)
+            eigvalue,eigvectors =  alg.eig(self.transition_matrix,left = False,right = True)
             self._righteigvectors = eigvectors
         return self._righteigvectors
     
