@@ -2,7 +2,7 @@ import numpy as np
 import scipy.linalg as alg
 import matplotlib.pyplot as plt
 from msmtools.analysis import pcca as _pcca
-
+import mcmm
 
 
 def impliedTimescales(trajs,lagtimes):
