@@ -178,7 +178,7 @@ class MSM(object):
         return plt.show()
         
     def visualizeStationary(self):
-        plt.bar(np.arange(len(self.stationary))+0.75,a.stationary,0.5)
+        plt.bar(np.arange(len(self.stationary))+0.75,self.stationary,0.5)
         plt.xticks(np.arange(len(self.stationary))+1)
         plt.title(r'Stationary Distribution')
         plt.xlabel(r'index of states')
