@@ -4,6 +4,28 @@ import matplotlib.pyplot as plt
 from msmtools.analysis import pcca as _pcca
 
 
+
+def impliedTimescales(trajs,lagtimes)
+    """should get discrete trajectories
+    Returns an array with the eigenvalues for different lagtimes """
+    
+    if np.max(trajs)>10:
+        n=10
+    else:
+        n=np.max(trajs)
+        
+    eigval=np.zeros([n,len(lagtimes)])
+    timescale=np.zeros([n,len(lagtimes)])
+    for i in range(len(lagtimes)):
+        lag=mcmm.trajCount.slidingWindowCountXL(trajs,lagtimes[i])
+        lag=mcmm.countmatrixTransitionmatrix.revTmatrix(lag)
+        lag=mcmm.msm.MSM(lag)
+        eigval[:,i]=lag.eigvalues[1:n]
+        for j in range(n):
+            timescale[j,i]=-1./np.log(eigval[j,i])
+    return timescale
+
+
 def DFS(D,v,E,label = []):
 	"""
 	Depth-First-Search: Finds all vertices which are accessible from node v
