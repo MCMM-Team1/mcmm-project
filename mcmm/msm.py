@@ -6,8 +6,20 @@ from msmtools.analysis import pcca as _pcca
 
 
 def impliedTimescales(trajs,lagtimes):
-    """should get discrete trajectories
-    Returns an array with the eigenvalues for different lagtimes """
+    """Calculates the implied timescales for different lagtimes
+    
+    Parameters
+    ----------
+    trajs    : matrixlike ; discretized trajectories (more than one)
+    lagtimes : arraylike ; list of different lagtimes
+    ---------- 
+    
+    Return
+    ----------
+    timescales: matrixlike ; each column referring to one lagtime and
+                each row referring to one eigenvalue of the transitionmatrix
+    ----------
+    """
     
     if np.max(trajs)>10:
         n=10
@@ -15,15 +27,15 @@ def impliedTimescales(trajs,lagtimes):
         n=np.max(trajs)
         
     eigval=np.zeros([n,len(lagtimes)])
-    timescale=np.zeros([n,len(lagtimes)])
+    timescales=np.zeros([n,len(lagtimes)])
     for i in range(len(lagtimes)):
         lag=mcmm.trajCount.slidingWindowCountXL(trajs,lagtimes[i])
         lag=mcmm.countmatrixTransitionmatrix.revTmatrix(lag)
         lag=mcmm.msm.MSM(lag)
         eigval[:,i]=lag.eigvalues[1:n+1]
         for j in range(n):
-            timescale[j,i]=-1./np.log(abs(eigval[j,i]))
-    return timescale
+            timescales[j,i]=-1./np.log(abs(eigval[j,i]))
+    return timescales
 
 
 def DFS(D,v,E,label = []):
