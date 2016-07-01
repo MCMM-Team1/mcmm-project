@@ -5,7 +5,7 @@ from msmtools.analysis import pcca as _pcca
 
 
 
-def impliedTimescales(trajs,lagtimes)
+def impliedTimescales(trajs,lagtimes):
     """should get discrete trajectories
     Returns an array with the eigenvalues for different lagtimes """
     
