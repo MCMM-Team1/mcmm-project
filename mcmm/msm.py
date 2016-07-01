@@ -20,9 +20,9 @@ def impliedTimescales(trajs,lagtimes):
         lag=mcmm.trajCount.slidingWindowCountXL(trajs,lagtimes[i])
         lag=mcmm.countmatrixTransitionmatrix.revTmatrix(lag)
         lag=mcmm.msm.MSM(lag)
-        eigval[:,i]=lag.eigvalues[1:n]
+        eigval[:,i]=lag.eigvalues[1:n+1]
         for j in range(n):
-            timescale[j,i]=-1./np.log(eigval[j,i])
+            timescale[j,i]=-1./np.log(abs(eigval[j,i]))
     return timescale
 
 
