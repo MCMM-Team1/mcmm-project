@@ -3,6 +3,7 @@ import numpy as np
 def slidingWindowCountXL(trajs,tau):
     """
     returns the countmatrix, gets a list of trajectories and tau
+    assumes that the discretization labels states, beginning with 0
     
     Paramaters
     ----------
@@ -15,6 +16,7 @@ def slidingWindowCountXL(trajs,tau):
     Countmatrix: matrixlike
     ------
     """
+    n = int(np.max(trajs)+ 1)
     Countmtrx = np.zeros((n,n))
     for traj in trajs:
         Countmtrx += slidingWindowCount(traj,tau)
@@ -23,6 +25,7 @@ def slidingWindowCountXL(trajs,tau):
 def slidingWindowCount(traj,tau):
     """
     returns the countmatrix, gets a trajectory and tau
+    assumes that the discretization labels states, beginning with 0
     
     Paramaters
     ----------
