@@ -2,6 +2,40 @@ import numpy as np
 import scipy.linalg as alg
 import matplotlib.pyplot as plt
 from msmtools.analysis import pcca as _pcca
+import mcmm
+
+
+def impliedTimescales(trajs,lagtimes):
+    """Calculates the implied timescales for different lagtimes
+    
+    Parameters
+    ----------
+    trajs    : matrixlike ; discretized trajectories (more than one)
+    lagtimes : arraylike ; list of different lagtimes
+    ---------- 
+    
+    Return
+    ----------
+    timescales: matrixlike ; each column referring to one lagtime and
+                each row referring to one eigenvalue of the transitionmatrix
+    ----------
+    """
+    
+    if np.max(trajs)>10:
+        n=10
+    else:
+        n=np.max(trajs)
+        
+    eigval=np.zeros([n,len(lagtimes)])
+    timescales=np.zeros([n,len(lagtimes)])
+    for i in range(len(lagtimes)):
+        lag=mcmm.trajCount.slidingWindowCountXL(trajs,lagtimes[i])
+        lag=mcmm.countmatrixTransitionmatrix.revTmatrix(lag)
+        lag=mcmm.msm.MSM(lag)
+        eigval[:,i]=lag.eigvalues[1:n+1]
+        for j in range(n):
+            timescales[j,i]=-1./np.log(abs(eigval[j,i]))
+    return timescales
 
 
 def DFS(D,v,E,label = []):
@@ -121,7 +155,9 @@ class MSM(object):
     @property
     def eigvalues(self):
         if self._eigvalues is None:
-            eigvalue,eigvector =  alg.eig(self.transition_matrix,left = True,right = False)
+            eigvalue,eigvectors =  alg.eig(self.transition_matrix,left = True,right = False)
+            idx = np.argsort(abs(eigvalue))[::-1]
+            eigvalue = eigvalue[idx]
             self._eigvalues = eigvalue
         return self._eigvalues
     
@@ -129,14 +165,18 @@ class MSM(object):
     @property
     def lefteigvectors(self):
         if self._lefteigvectors is None:
-            eigvalue,eigvector =  alg.eig(self.transition_matrix,left = True,right = False)
+            eigvalue,eigvectors =  alg.eig(self.transition_matrix,left = True,right = False)
+            idx = np.argsort(abs(eigvalue))[::-1]
+            eigvectors = eigvectors[:,idx]
             self._lefteigvectors = eigvectors
         return self._lefteigvectors
     
     @property
     def righteigvectors(self):
         if self._righteigvectors is None:
-            eigvalue,eigvector =  alg.eig(self.transition_matrix,left = False,right = True)
+            eigvalue,eigvectors =  alg.eig(self.transition_matrix,left = False,right = True)
+            idx = np.argsort(abs(eigvalue))[::-1]
+            eigvectors = eigvectors[:,idx]
             self._righteigvectors = eigvectors
         return self._righteigvectors
     
@@ -175,7 +215,15 @@ class MSM(object):
         plt.ylabel(r'Eigenvalue $\lambda_i$')
         plt.title(r'Eigenvalues')
         plt.ylim(0,1.05)
-        return plt.show()	
+        return plt.show()
+        
+    def visualizeStationary(self):
+        plt.bar(np.arange(len(self.stationary))+0.75,self.stationary,0.5)
+        plt.xticks(np.arange(len(self.stationary))+1)
+        plt.title(r'Stationary Distribution')
+        plt.xlabel(r'index of states')
+        plt.ylabel(r'probability')
+        return plt.show()
         
         
 def checkStochasticMatrix(t):
