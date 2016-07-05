@@ -1,7 +1,7 @@
 import numpy as np
 
 #@np.vectorize
-def computeDistancesToClusters(clusters,point):
+def _computeDistancesToClusters(clusters,point):
     #clusters has to be a list of points!!!
     temp = np.zeros(len(clusters), dtype=np.float)
     counter = 0
@@ -10,20 +10,20 @@ def computeDistancesToClusters(clusters,point):
         counter +=1
     return temp #np.min(np.array([(np.linalg.norm(np.subtract(x,point)) for x in clusters)]))
 
-def initialization(traj,k):
+def _initialization(traj,k):
     distances = np.zeros(len(traj), dtype=np.float)
     r = np.random.randint(0,len(traj))
     # the r'th element is the first cluster center, chosen uniformly at random
     clusters = np.array([traj[r]], dtype=np.float)
     for l in range(1,k):
         for i in range(len(traj)):
-            distances[i]=np.min(computeDistancesToClusters(clusters,traj[i]))
+            distances[i]=np.min(_computeDistancesToClusters(clusters,traj[i]))
         #choose next cluster point
-        nextClusterPoint = chooseNextClusterPoint(distances)
+        nextClusterPoint = _chooseNextClusterPoint(distances)
         clusters = np.concatenate([clusters,np.array([traj[nextClusterPoint]])])
     return clusters
 
-def kmeans(data,dim,k):
+def kmeans(data,dim=2,k=100):
     """
     Parameters
     ----------
@@ -41,13 +41,13 @@ def kmeans(data,dim,k):
     """
     superData = np.concatenate(data)
     
-    allClusters = initialization(superData,k)
+    allClusters = _initialization(superData,k)
     result = np.empty((len(data),len(data[0])))
     while True:
         allClustersOld = allClusters
         helpme = np.zeros(len(superData))
         for c in range(len(superData)):
-            helpme[c] = np.argmin(computeDistancesToClusters(allClusters,superData[c]))
+            helpme[c] = np.argmin(_computeDistancesToClusters(allClusters,superData[c]))
         countSize = np.zeros(k, dtype=np.int)
         countMean = np.zeros((k,dim), dtype=np.float)
         for c in range(len(superData)):
@@ -67,7 +67,7 @@ def kmeans(data,dim,k):
         
     
 
-def chooseNextClusterPoint(distances):
+def _chooseNextClusterPoint(distances):
     #distances: list of floats
     temp = np.array([d * d for d in distances])
     total = np.sum(temp)
