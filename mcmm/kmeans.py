@@ -23,7 +23,7 @@ def _initialization(traj,k):
         clusters = np.concatenate([clusters,np.array([traj[nextClusterPoint]])])
     return clusters
 
-def kmeans(data,dim=2,k=100):
+def KMeans(data,dim=2,k=100):
     """
     Parameters
     ----------
