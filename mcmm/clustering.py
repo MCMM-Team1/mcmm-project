@@ -16,12 +16,19 @@ class cluster(object):
         """
         self.trajectories = data
         self.dimension = dim
-        self.centers = ctrs
+        self.numberCenters = ctrs
         self._disctrajectories = None
+        self._centers = None
 
     @property
     def disctrajectories(self):
         if self._disctrajectories is None:
-             self._disctrajectories = mcmm.kmeans.KMeans(self.trajectories,self.dimension,self.centers)
+             (self._disctrajectories,self._centers) = mcmm.kmeans.KMeans(self.trajectories,self.dimension,self.numberCenters)
         return self._disctrajectories
 
+
+    @property
+    def centers(self):
+        if self._disctrajectories is None:
+             (self._disctrajectories,self._centers) = mcmm.kmeans.KMeans(self.trajectories,self.dimension,self.numberCenters)
+        return self._centers
