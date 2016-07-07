@@ -28,10 +28,10 @@ def rawScatter(raw_data):
 	    ax.set_xlabel(r"$x$ / a.u.")
 	    ax.set_ylabel(r"$y$ / a.u.")
 	    ax.set_aspect('equal')
-	    
-    #Defines the number of plottet points in the scatter plot, nPointsPlot (2000 is good)
 
-    nTraj, trajLength, nDim= np.shape(raw_data)
+	nTraj, trajLength, nDim= np.shape(raw_data)
+	
+    """Defines the number of plottet points in the scatter plot, nPointsPlot (500 is good)"""
 
     nPointsPlot = 500
     if (trajLength<nPointsPlot):
@@ -45,25 +45,23 @@ def rawScatter(raw_data):
         for rd in raw_data:
             ax[0].scatter(rd[::a, 0], rd[::a, 1], c='grey', s=20)
             format_square(ax[0])
-            fig.tight_layout()
         for rd in raw_data:
             ax[1].scatter(rd[::a, 0], rd[::a, 1], c='grey', s=20)
             format_square(ax[1])
             ax[1].set_xlabel(r"$x$ / a.u.")
             ax[1].set_ylabel(r"$z$ / a.u.")
-            fig.tight_layout()
         for rd in raw_data:
             ax[2].scatter(rd[::a, 0], rd[::a, 1], c='grey', s=20)
             format_square(ax[2])
             ax[2].set_xlabel(r"$y$ / a.u.")
             ax[2].set_ylabel(r"$z$ / a.u.")
-            return fig.tight_layout()
     else:
         fig, ax = plt.subplots(figsize=(5, 5))
         for rd in raw_data:
             ax.scatter(rd[::a, 0], rd[::a, 1], c='grey', s=20)
             format_square(ax)
-            return fig.tight_layout()
+
+    return fig.tight_layout()
 
 
 
