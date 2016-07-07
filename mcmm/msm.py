@@ -5,7 +5,7 @@ from msmtools.analysis import pcca as _pcca
 import mcmm
 
 
-def impliedTimescales(trajs,lagtimes,plotboolean):
+def impliedTimescales(trajs,lagtimes,plotboolean=True):
     """Calculates the implied timescales for different lagtimes and plots it if not set to False
     
     Parameters
