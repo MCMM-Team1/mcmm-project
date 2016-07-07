@@ -5,13 +5,14 @@ import numpy as np
 import mcmm
 
 class cluster(object):
-    def __init__(self,data,dim = 2,ctrs = 100):
+    def __init__(self,data,ctrs = 100,dim = 2):
         """    
         Parameters
         ----------
-        data: ndarraylike, i.e. from mcmm.example.generate_test_data()
-        dim : integer, specifies the dimension of the points in data
+        data: list of ndarrays, i.e. from mcmm.example.generate_test_data()
         ctrs: integer, specifies the number of centers
+        dim : integer, specifies the dimension of the points in data
+
         ----------
         """
         self.trajectories = data
