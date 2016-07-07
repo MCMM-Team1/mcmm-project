@@ -7,13 +7,13 @@ def slidingWindowCountXL(trajs,tau):
     
     Paramaters
     ----------
-    trajs: array of arraylike
+    trajs: list of numpy.ndarray
     tau : integer
     ----------
     
     Return
     ------
-    Countmatrix: matrixlike
+    Countmatrix: numpy.ndarray
     ------
     """
     n = int(np.max(trajs)+ 1)
