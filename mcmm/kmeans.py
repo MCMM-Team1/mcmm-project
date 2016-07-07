@@ -29,13 +29,14 @@ def _initialization(traj,k):
         clusters = np.concatenate([clusters,np.array([traj[nextClusterPoint]])])
     return clusters
 
-def KMeans(data,dim=2,k=100):
+def KMeans(data,dim=2,k=100,tolerance=0.005):
     """
     Parameters
     ----------
     data      : numpy ndarraylike, list of trajectories, all of the same length!!!
     dim       : int, the dimension of the trajectories
     k         : int, the number of clusters
+    tolerance : float, defines when clusterpoints "dont change", in max-norm
    
     Return
     ------
@@ -65,7 +66,7 @@ def KMeans(data,dim=2,k=100):
             countMean[helpme[c]] += superData[c]
         for i in range(k):
             allClusters[i] = np.multiply((1.0/countSize[i]) , countMean[i])
-        if np.max(allClusters - allClustersOld) < 0.01 and np.min(allClusters - allClustersOld) > -0.01:
+        if np.max(allClusters - allClustersOld) < tolerance and np.min(allClusters - allClustersOld) > (-1)*tolerance:
             break
     
     helpcounter = 0
