@@ -33,7 +33,7 @@ def rawScatter(raw_data):
 
     nTraj, trajLength, nDim= np.shape(raw_data)
 
-    nPointsPlot = 2000
+    nPointsPlot = 500
     if (trajLength<nPointsPlot):
         a=1
     else: 
