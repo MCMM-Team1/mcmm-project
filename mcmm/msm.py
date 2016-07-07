@@ -18,7 +18,17 @@ def rawScatter(raw_data):
     scatter plot: Returns one plot for 2-dimensional data. 3 plots for three dimensional data.
     ----------
     """
-
+    
+    #Format of the scatter plots
+    def format_square(ax):
+	    ax.set_xlim(-2, 2)
+	    ax.set_ylim(-2, 2)
+	    ax.set_xticks([-2, -1, 0, 1, 2])
+	    ax.set_yticks([-2, -1, 0, 1, 2])
+	    ax.set_xlabel(r"$x$ / a.u.")
+	    ax.set_ylabel(r"$y$ / a.u.")
+	    ax.set_aspect('equal')
+	    
     #Defines the number of plottet points in the scatter plot, nPointsPlot (2000 is good)
 
     nTraj, trajLength, nDim= np.shape(raw_data)
