@@ -5,13 +5,14 @@ from msmtools.analysis import pcca as _pcca
 import mcmm
 
 
-def impliedTimescales(trajs,lagtimes):
-    """Calculates the implied timescales for different lagtimes
+def impliedTimescales(trajs,lagtimes,plotboolean):
+    """Calculates the implied timescales for different lagtimes and plots it if not set to False
     
     Parameters
     ----------
-    trajs    : matrixlike ; discretized trajectories (more than one)
-    lagtimes : arraylike ; list of different lagtimes
+    trajs       : matrixlike ; discretized trajectories (more than one)
+    lagtimes    : arraylike ; list of different lagtimes
+    plotboolean : boolean ; default is True for plotting
     ---------- 
     
     Return
@@ -35,6 +36,16 @@ def impliedTimescales(trajs,lagtimes):
         eigval[:,i]=lag.eigvalues[1:n+1]
         for j in range(n):
             timescales[j,i]=-1./np.log(abs(eigval[j,i]))
+    
+    if plotboolean:
+        fig=plt.figure(figsize=[5,5])
+        for i in range(len(timescales[:,0])):
+            plt.loglog(lagtimes,timescales[i,:],'-o')
+        plt.xlabel('lag time / steps')
+        plt.ylabel('timescale / steps')
+        fig.tight_layout()
+        plt.show()        
+    
     return timescales
 
 
