@@ -1,7 +1,13 @@
 import numpy as np
+import scipy as sp
+from scipy import spatial
 
 #@np.vectorize
-def _computeDistancesToClusters(clusters,point):
+def _computeSquareDistancesToClusters(clusters,point):
+    
+    temppoint = np.array([point])
+    return sp.spatial.distance.cdist(clusters,temppoint,'sqeuclidean')
+    
     #clusters has to be a list of points!!!
     temp = np.zeros(len(clusters), dtype=np.float)
     counter = 0
@@ -17,7 +23,7 @@ def _initialization(traj,k):
     clusters = np.array([traj[r]], dtype=np.float)
     for l in range(1,k):
         for i in range(len(traj)):
-            distances[i]=np.min(_computeDistancesToClusters(clusters,traj[i]))
+            distances[i]=np.min(_computeSquareDistancesToClusters(clusters,traj[i]))
         #choose next cluster point
         nextClusterPoint = _chooseNextClusterPoint(distances)
         clusters = np.concatenate([clusters,np.array([traj[nextClusterPoint]])])
@@ -43,11 +49,15 @@ def KMeans(data,dim=2,k=100):
     
     allClusters = _initialization(superData,k)
     result = np.empty((len(data),len(data[0])))
+    
+    #print("initialisation done")
+    
     while True:
-        allClustersOld = allClusters
+        #print("entered while loop (again)")
+        allClustersOld = allClusters.copy()
         helpme = np.zeros(len(superData))
         for c in range(len(superData)):
-            helpme[c] = np.argmin(_computeDistancesToClusters(allClusters,superData[c]))
+            helpme[c] = np.argmin(_computeSquareDistancesToClusters(allClusters,superData[c]))
         countSize = np.zeros(k, dtype=np.int)
         countMean = np.zeros((k,dim), dtype=np.float)
         for c in range(len(superData)):
@@ -55,7 +65,7 @@ def KMeans(data,dim=2,k=100):
             countMean[helpme[c]] += superData[c]
         for i in range(k):
             allClusters[i] = np.multiply((1.0/countSize[i]) , countMean[i])
-        if np.max(allClusters - allClustersOld) < 0.1 and np.min(allClusters - allClustersOld) > -0.1:
+        if np.max(allClusters - allClustersOld) < 0.01 and np.min(allClusters - allClustersOld) > -0.01:
             break
     
     helpcounter = 0
@@ -63,18 +73,18 @@ def KMeans(data,dim=2,k=100):
         for c2 in range(len(data[c1])):
             result[c1][c2] = helpme[helpcounter]
             helpcounter += 1
-    return result
+    return (result,allClusters)
         
     
 
 def _chooseNextClusterPoint(distances):
     #distances: list of floats
-    temp = np.array([d * d for d in distances])
-    total = np.sum(temp)
+    #temp = np.array([d * d for d in distances])
+    total = np.sum(distances)
     rand = np.random.uniform(0,total)
     result = 0
     while(rand >= 0):
-        rand -= temp[result]
+        rand -= distances[result]
         if(rand < 0):
             return result
         result += 1
