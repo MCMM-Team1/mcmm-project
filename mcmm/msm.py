@@ -92,7 +92,7 @@ def rawScatter(raw_data):
 	    ax.set_aspect('equal')
 
 	
-	nTraj, trajLength, nDim= np.shape(raw_data)
+    nTraj, trajLength, nDim= np.shape(raw_data)
 	
     """Defines the number of plottet points in the scatter plot, nPointsPlot (500 is good)"""
 
