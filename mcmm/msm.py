@@ -4,6 +4,58 @@ import matplotlib.pyplot as plt
 from msmtools.analysis import pcca as _pcca
 import mcmm
 
+def rawScatter(raw_data):
+
+    """Shows scatterplot of data
+    
+    Parameters
+    ----------
+    raw data    : trajectories from mcmm.example.generate_test_data
+    ---------- 
+    
+    Return
+    ----------
+    scatter plot: Returns one plot for 2-dimensional data. 3 plots for three dimensional data.
+    ----------
+    """
+
+    #Defines the number of plottet points in the scatter plot, nPointsPlot (2000 is good)
+
+    nTraj, trajLength, nDim= np.shape(raw_data)
+
+    nPointsPlot = 2000
+    if (trajLength<nPointsPlot):
+        a=1
+    else: 
+        a = trajLength/nPointsPlot
+
+    if (nDim==3):
+        '''Scatter plot of raw data.  For 3 dimensional data, the scatter plots are for x,y x,z and y,z.'''
+        fig, ax = plt.subplots(1, nDim, figsize=(nDim * 5, 5))
+        for rd in raw_data:
+            ax[0].scatter(rd[::a, 0], rd[::a, 1], c='grey', s=20)
+            format_square(ax[0])
+            fig.tight_layout()
+        for rd in raw_data:
+            ax[1].scatter(rd[::a, 0], rd[::a, 1], c='grey', s=20)
+            format_square(ax[1])
+            ax[1].set_xlabel(r"$x$ / a.u.")
+            ax[1].set_ylabel(r"$z$ / a.u.")
+            fig.tight_layout()
+        for rd in raw_data:
+            ax[2].scatter(rd[::a, 0], rd[::a, 1], c='grey', s=20)
+            format_square(ax[2])
+            ax[2].set_xlabel(r"$y$ / a.u.")
+            ax[2].set_ylabel(r"$z$ / a.u.")
+            return fig.tight_layout()
+    else:
+        fig, ax = plt.subplots(figsize=(5, 5))
+        for rd in raw_data:
+            ax.scatter(rd[::a, 0], rd[::a, 1], c='grey', s=20)
+            format_square(ax)
+            return fig.tight_layout()
+
+
 
 def impliedTimescales(trajs,lagtimes,plotboolean=True):
     """Calculates the implied timescales for different lagtimes and plots it if not set to False
