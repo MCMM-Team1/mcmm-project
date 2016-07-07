@@ -4,6 +4,68 @@ import matplotlib.pyplot as plt
 from msmtools.analysis import pcca as _pcca
 import mcmm
 
+
+
+def rawTimeSeries(raw_data):
+    """Shows timeseries of raw data
+    
+    Parameters
+    ----------
+    raw data    : trajectories from mcmm.example.generate_test_data
+    ---------- 
+    
+    Return
+    ----------
+    time series: Returns plot of (time,1 dimension) for 2 or 3 dimensions
+    ----------
+    """
+    
+    nTraj, trajLength, nDim= np.shape(raw_data)
+
+    """Defines the number of plottet points in the time series, nPointsPlot (100 is good)"""
+    nPointsPlot = 100
+    if (trajLength<nPointsPlot):
+        a=1
+    else: 
+        a = trajLength/nPointsPlot
+
+    """Defines the number of plottet trajectories in the time series, nTrajPlot (3 is good)"""
+    nTrajPlot = 3
+    if (nTraj<nTrajPlot):
+        b=1
+    else: 
+        b = nTraj/nTrajPlot
+
+    if (nDim==3):
+        '''Time series for data. '''
+        fig, ax = plt.subplots(1, nDim, figsize=(nDim * 5, 5))
+        for rd in raw_data[::b]:
+            ax[0].plot(rd[::a, 0],'-o')
+            ax[0].set_xlabel(r"$Time steps$ / a.u.")
+            ax[0].set_ylabel(r"$x$ / a.u.")
+        for rd in raw_data[::b]:
+            ax[1].plot(rd[::a, 1],'-o')
+            ax[1].set_xlabel(r"$Time steps$ / a.u.")
+            ax[1].set_ylabel(r"$y$ / a.u.")
+        for rd in raw_data[::b]:
+            ax[2].plot(rd[::a, 0],'-o')
+            ax[2].set_xlabel(r"$Time steps$ / a.u.")
+            ax[2].set_ylabel(r"$z$ / a.u.")
+    elif (nDim==2):
+        '''Time series for data. '''
+        fig, ax = plt.subplots(1, nDim, figsize=(nDim * 5, 5))
+        for rd in raw_data[::b]:
+            ax[0].plot(rd[::a, 0],'-o')
+            ax[0].set_xlabel(r"$Time steps$ / a.u.")
+            ax[0].set_ylabel(r"$x$ / a.u.")
+        for rd in raw_data[::b]:
+            ax[1].plot(rd[::a, 1],'-o')
+            ax[1].set_xlabel(r"$Time steps$ / a.u.")
+            ax[1].set_ylabel(r"$y$ / a.u.")
+            
+    return fig.tight_layout()
+
+
 def rawScatter(raw_data):
 
     """Shows scatterplot of data
