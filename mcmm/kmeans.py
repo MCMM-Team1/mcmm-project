@@ -48,7 +48,9 @@ def KMeans(data,dim=2,k=100,tolerance=0.005):
     Therefore call a kmeans subprocedure.
     """
     superData = np.concatenate(data)
-    
+    if len(superData) < k:
+        k = len(superData)
+        print("reduced number of cluster to the overall number of data")
     allClusters = _initialization(superData,k)
     #result = np.empty((len(data),len(data[0])))
     result = []
