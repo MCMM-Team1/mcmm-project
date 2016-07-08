@@ -314,6 +314,19 @@ class MSM(object):
             self._righteigvectors = eigvectors
         return self._righteigvectors
     
+    def mfptTransM(self,lagtime):
+        """Calculates Mean-First-Passage-Times-Matrix"""
+        #Source: http://www.math.niu.edu/LA09/slides/neumann.pdf
+        stat=self.stationary
+        t=self.transition_matrix
+        a=np.identity(len(t))-t
+        m0=np.identity(len(t))-np.linalg.pinv(a)+np.dot(np.ones(np.shape(t)),np.identity(len(t))*np.diag(np.linalg.pinv(a)))
+        mfp=np.dot(m0,np.linalg.inv(np.identity(len(t))*stat))
+        mfp=mfp*lagtime
+        for i in range(len(t)):
+            mfp[i,i]=0.
+        return mfp
+    
     def pcca(self, numstates):
     	return _pcca(self.transition_matrix , numstates)
     
