@@ -3,10 +3,11 @@ import scipy as sp
 from scipy import spatial
 
 #@np.vectorize
-def _computeSquareDistancesToClusters(clusters,point):
+def _computeSquareDistancesToClusters(clusters,points):
     
-    temppoint = np.array([point])
-    return sp.spatial.distance.cdist(clusters,temppoint,'sqeuclidean')
+    #temppoints = np.array([points])
+    #return sp.spatial.distance.cdist(clusters,temppoints,'sqeuclidean')
+    return sp.spatial.distance.cdist(clusters,points,'sqeuclidean')
     
     #clusters has to be a list of points!!!
     temp = np.zeros(len(clusters), dtype=np.float)
@@ -22,18 +23,22 @@ def _initialization(traj,k):
     # the r'th element is the first cluster center, chosen uniformly at random
     clusters = np.array([traj[r]], dtype=np.float)
     for l in range(1,k):
-        for i in range(len(traj)):
-            distances[i]=np.min(_computeSquareDistancesToClusters(clusters,traj[i]))
+      #  for i in range(len(traj)):
+            #distances[i]=np.min(_computeSquareDistancesToClusters(clusters,traj[i]))
+        distancesmatrix=_computeSquareDistancesToClusters(clusters,traj)
+        distances = np.amin(distancesmatrix,axis = 0)
+        #print("distancesmatrix",distancesmatrix)
+        #print("distances",distances)
         #choose next cluster point
         nextClusterPoint = _chooseNextClusterPoint(distances)
         clusters = np.concatenate([clusters,np.array([traj[nextClusterPoint]])])
     return clusters
 
-def KMeans(data,dim=2,k=100,tolerance=0.005):
+def KMeans(data,dim=2,k=100,tolerance=0.01):
     """
     Parameters
     ----------
-    data      : list of numpy ndarrays, list of trajectories, all of the same length!!!
+    data      : list of numpy ndarrays, list of trajectories, possibly of different lenghts
     dim       : int, the dimension of the trajectories
     k         : int, the number of clusters
     tolerance : float, defines when clusterpoints "dont change", in max-norm
@@ -48,18 +53,24 @@ def KMeans(data,dim=2,k=100,tolerance=0.005):
     Therefore call a kmeans subprocedure.
     """
     superData = np.concatenate(data)
-    
+    if len(superData) < k:
+        k = len(superData)
+        print("reduced number of cluster to the overall number of data")
     allClusters = _initialization(superData,k)
-    result = np.empty((len(data),len(data[0])))
+    #result = np.empty((len(data),len(data[0])))
+    result = []
+
     
     #print("initialisation done")
     
     while True:
         #print("entered while loop (again)")
         allClustersOld = allClusters.copy()
-        helpme = np.zeros(len(superData))
-        for c in range(len(superData)):
-            helpme[c] = np.argmin(_computeSquareDistancesToClusters(allClusters,superData[c]))
+        helpme = np.zeros(len(superData),dtype=np.int)
+        #for c in range(len(superData)):
+         #   helpme[c] = np.argmin(_computeSquareDistancesToClusters(allClusters,superData[c]))
+        helpme = np.argmin(_computeSquareDistancesToClusters(allClusters,superData),axis = 0)
+        print("helpme",helpme)
         countSize = np.zeros(k, dtype=np.int)
         countMean = np.zeros((k,dim), dtype=np.float)
         for c in range(len(superData)):
@@ -69,15 +80,24 @@ def KMeans(data,dim=2,k=100,tolerance=0.005):
             allClusters[i] = np.multiply((1.0/countSize[i]) , countMean[i])
         if np.max(allClusters - allClustersOld) < tolerance and np.min(allClusters - allClustersOld) > (-1)*tolerance:
             break
-    
+    """
     helpcounter = 0
     for c1 in range(len(data)):
         for c2 in range(len(data[c1])):
             result[c1][c2] = helpme[helpcounter]
+            
+            helpcounter += 1 """
+    helpcounter = 0
+    for c1 in range(len(data)):
+        hilfresult = np.empty(len(data[c1]))
+        for c2 in range(len(data[c1])):
+            hilfresult[c2] = helpme[helpcounter]
+            
             helpcounter += 1
-    
-    _result = [result[i, :] for i in range(result.shape[0])]
-    return (_result,allClusters)
+        result.append(hilfresult)
+    #_result = [result[i, :] for i in range(result.shape[0])]
+    #return (_result,allClusters)
+    return (result,allClusters)
         
     
 
