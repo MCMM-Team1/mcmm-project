@@ -33,14 +33,15 @@ def KMeans(data,dim=2,k=100,tolerance=0.005):
     """
     Parameters
     ----------
-    data      : numpy ndarraylike, list of trajectories, all of the same length!!!
+    data      : list of numpy ndarrays, list of trajectories, all of the same length!!!
     dim       : int, the dimension of the trajectories
     k         : int, the number of clusters
     tolerance : float, defines when clusterpoints "dont change", in max-norm
    
     Return
     ------
-    distrajs : numpy ndarraylike, list of discrete trajectories
+    distrajs : list of numpy ndarrays, list of discrete trajectories
+    centers : numpy ndarray, all the cluster centers
    
     For each trajectory in the given data, do a kmeans(++) algorithm
     to find the clusters and output discrete trajectories.
@@ -74,7 +75,9 @@ def KMeans(data,dim=2,k=100,tolerance=0.005):
         for c2 in range(len(data[c1])):
             result[c1][c2] = helpme[helpcounter]
             helpcounter += 1
-    return (result,allClusters)
+    
+    _result = [result[i, :] for i in range(result.shape[0])]
+    return (_result,allClusters)
         
     
 
