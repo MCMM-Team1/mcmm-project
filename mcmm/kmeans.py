@@ -3,10 +3,11 @@ import scipy as sp
 from scipy import spatial
 
 #@np.vectorize
-def _computeSquareDistancesToClusters(clusters,point):
+def _computeSquareDistancesToClusters(clusters,points):
     
-    temppoint = np.array([point])
-    return sp.spatial.distance.cdist(clusters,temppoint,'sqeuclidean')
+    #temppoints = np.array([points])
+    #return sp.spatial.distance.cdist(clusters,temppoints,'sqeuclidean')
+    return sp.spatial.distance.cdist(clusters,points,'sqeuclidean')
     
     #clusters has to be a list of points!!!
     temp = np.zeros(len(clusters), dtype=np.float)
@@ -22,14 +23,18 @@ def _initialization(traj,k):
     # the r'th element is the first cluster center, chosen uniformly at random
     clusters = np.array([traj[r]], dtype=np.float)
     for l in range(1,k):
-        for i in range(len(traj)):
-            distances[i]=np.min(_computeSquareDistancesToClusters(clusters,traj[i]))
+      #  for i in range(len(traj)):
+            #distances[i]=np.min(_computeSquareDistancesToClusters(clusters,traj[i]))
+        distancesmatrix=_computeSquareDistancesToClusters(clusters,traj)
+        distances = np.amin(distancesmatrix,axis = 0)
+        #print("distancesmatrix",distancesmatrix)
+        #print("distances",distances)
         #choose next cluster point
         nextClusterPoint = _chooseNextClusterPoint(distances)
         clusters = np.concatenate([clusters,np.array([traj[nextClusterPoint]])])
     return clusters
 
-def KMeans(data,dim=2,k=100,tolerance=0.005):
+def KMeans(data,dim=2,k=100,tolerance=0.01):
     """
     Parameters
     ----------
@@ -62,8 +67,10 @@ def KMeans(data,dim=2,k=100,tolerance=0.005):
         #print("entered while loop (again)")
         allClustersOld = allClusters.copy()
         helpme = np.zeros(len(superData),dtype=np.int)
-        for c in range(len(superData)):
-            helpme[c] = np.argmin(_computeSquareDistancesToClusters(allClusters,superData[c]))
+        #for c in range(len(superData)):
+         #   helpme[c] = np.argmin(_computeSquareDistancesToClusters(allClusters,superData[c]))
+        helpme = np.argmin(_computeSquareDistancesToClusters(allClusters,superData),axis = 0)
+        print("helpme",helpme)
         countSize = np.zeros(k, dtype=np.int)
         countMean = np.zeros((k,dim), dtype=np.float)
         for c in range(len(superData)):
