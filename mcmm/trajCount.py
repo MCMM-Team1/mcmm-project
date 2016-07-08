@@ -1,6 +1,6 @@
 import numpy as np
 
-def slidingWindowCountXL(trajs,tau):
+def slidingWindowCountXL(trajs,tau,k):
     """
     returns the countmatrix, gets a list of trajectories and tau
     assumes that the discretization labels states, beginning with 0
@@ -9,6 +9,7 @@ def slidingWindowCountXL(trajs,tau):
     ----------
     trajs: list of numpy.ndarray
     tau : integer
+    k : integer, number of states (= number of clusters)
     ----------
     
     Return
@@ -16,13 +17,12 @@ def slidingWindowCountXL(trajs,tau):
     Countmatrix: numpy.ndarray
     ------
     """
-    n = int(np.max(trajs)+ 1)
-    Countmtrx = np.zeros((n,n))
+    Countmtrx = np.zeros((k,k))
     for traj in trajs:
-        Countmtrx += slidingWindowCount(traj,tau)
+        Countmtrx += slidingWindowCount(traj,tau,k)
     return Countmtrx
 
-def slidingWindowCount(traj,tau):
+def slidingWindowCount(traj,tau,k):
     """
     returns the countmatrix, gets a trajectory and tau
     assumes that the discretization labels states, beginning with 0
@@ -31,22 +31,22 @@ def slidingWindowCount(traj,tau):
     ----------
     traj: arraylike
     tau : integer
+    k : integer, number of states (= number of clusters)
     ----------
     
     Return
     ------
-    Countmatrix: matrixlike
+    Countmatrix: numpy.ndarray
     ------
     """
-    n = int(np.max(traj)+ 1)
-    Countmatrix = np.zeros((n,n))
+    Countmatrix = np.zeros((k,k))
     T = len(traj) 
     
-    for i in range(n):
-        for j in range(n):
+    for i in range(k):
+        for j in range(k):
             summe = 0
-            for k in range(T- tau ):
-                if traj[k] == i and traj[k+tau] == j:
+            for l in range(T- tau ):
+                if traj[l] == i and traj[l+tau] == j:
                     summe +=1
             Countmatrix[i][j] = summe
     return Countmatrix
