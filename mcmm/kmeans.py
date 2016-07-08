@@ -70,7 +70,7 @@ def KMeans(data,dim=2,k=100,tolerance=0.01):
         #for c in range(len(superData)):
          #   helpme[c] = np.argmin(_computeSquareDistancesToClusters(allClusters,superData[c]))
         helpme = np.argmin(_computeSquareDistancesToClusters(allClusters,superData),axis = 0)
-        print("helpme",helpme)
+        #print("helpme",helpme)
         countSize = np.zeros(k, dtype=np.int)
         countMean = np.zeros((k,dim), dtype=np.float)
         for c in range(len(superData)):
