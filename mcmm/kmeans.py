@@ -33,7 +33,7 @@ def KMeans(data,dim=2,k=100,tolerance=0.005):
     """
     Parameters
     ----------
-    data      : list of numpy ndarrays, list of trajectories, all of the same length!!!
+    data      : list of numpy ndarrays, list of trajectories, possibly of different lenghts
     dim       : int, the dimension of the trajectories
     k         : int, the number of clusters
     tolerance : float, defines when clusterpoints "dont change", in max-norm
@@ -50,14 +50,16 @@ def KMeans(data,dim=2,k=100,tolerance=0.005):
     superData = np.concatenate(data)
     
     allClusters = _initialization(superData,k)
-    result = np.empty((len(data),len(data[0])))
+    #result = np.empty((len(data),len(data[0])))
+    result = []
+
     
     #print("initialisation done")
     
     while True:
         #print("entered while loop (again)")
         allClustersOld = allClusters.copy()
-        helpme = np.zeros(len(superData))
+        helpme = np.zeros(len(superData),dtype=np.int)
         for c in range(len(superData)):
             helpme[c] = np.argmin(_computeSquareDistancesToClusters(allClusters,superData[c]))
         countSize = np.zeros(k, dtype=np.int)
@@ -69,15 +71,24 @@ def KMeans(data,dim=2,k=100,tolerance=0.005):
             allClusters[i] = np.multiply((1.0/countSize[i]) , countMean[i])
         if np.max(allClusters - allClustersOld) < tolerance and np.min(allClusters - allClustersOld) > (-1)*tolerance:
             break
-    
+    """
     helpcounter = 0
     for c1 in range(len(data)):
         for c2 in range(len(data[c1])):
             result[c1][c2] = helpme[helpcounter]
+            
+            helpcounter += 1 """
+    helpcounter = 0
+    for c1 in range(len(data)):
+        hilfresult = np.empty(len(data[c1]))
+        for c2 in range(len(data[c1])):
+            hilfresult[c2] = helpme[helpcounter]
+            
             helpcounter += 1
-    
-    _result = [result[i, :] for i in range(result.shape[0])]
-    return (_result,allClusters)
+        result.append(hilfresult)
+    #_result = [result[i, :] for i in range(result.shape[0])]
+    #return (_result,allClusters)
+    return (result,allClusters)
         
     
 
