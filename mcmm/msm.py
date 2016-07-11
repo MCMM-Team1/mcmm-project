@@ -328,8 +328,14 @@ class MSM(object):
         return mfp
     
     def pcca(self, numstates):
-    	return _pcca(self.transition_matrix , numstates)
-    
+        """"Returns a list of arrays with the states assigned to a metastable state"""
+        pc=_pcca(self.transition_matrix , numstates)
+        pcmax=np.argmax(pc,1)
+        msassign=[]
+        for i in range(len(pc[0,:])):
+            msassign.append(np.where(pcmax==i)[0])
+            
+        return msassign
     
     
     def visualizeMatrix(self):
