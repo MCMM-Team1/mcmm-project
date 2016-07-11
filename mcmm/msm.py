@@ -4,7 +4,15 @@ import matplotlib.pyplot as plt
 from msmtools.analysis import pcca as _pcca
 import mcmm
 
-
+def transMmetareduc(msassign):
+    '''Calculates the Transition-matrix of the metastable states, given the assignment-list as the return of pcca'''
+    tmetaredu=np.zeros([len(msassign),len(msassign)])
+    for i in range(len(msassign)):
+        for j in range(len(msassign)):
+            for k in range(len(msassign[i])):
+                for m in range(len(msassign[i])):
+                    tmetaredu[i,j] += t[msassign[i][m],msassign[j][k]]
+    return np.divide(tmetaredu,(np.sum(tmetaredu,1)[:,None])*1.0) 
 
 def rawTimeSeries(raw_data):
     """Shows timeseries of raw data
