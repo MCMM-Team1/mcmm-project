@@ -196,6 +196,19 @@ class TestStringMethods(unittest.TestCase):
         assert_true(checkTolerance(t8,mcmm.countmatrixTransitionmatrix.nonrevTmatrix(c82),tolerance))
         assert_true(checkTolerance(t8,mcmm.countmatrixTransitionmatrix.nonrevTmatrix(c83),tolerance))
         assert_true(checkTolerance(t8,mcmm.countmatrixTransitionmatrix.nonrevTmatrix(c84),tolerance)) 
+
+    def test_reducedCountMatrix(self):
+        bigMatrix = np.array([[1,2,0,3,0,4,5],[6,7,0,8,0,9,10],[5,5,5,5,5,5,5],[11,12,0,13,0,14,15],[5,5,5,5,5,5,5],16,17,0,18,0,19,20],[21,22,0,23,0,24,25]])
+        dictionary = {0:0 , 1:1 , 2:3 , 3:5 , 4:6}
+        smallMatrix = np.array([[1,2,3,4,5],[6,7,8,9,10],[11,12,13,14,15],[16,17,18,19,20],[21,22,23,24,25]])
         
+        indices = mcmm.msm.findLargestCommClass(bigMatrix)
+        resultdictionary = {i:indices[i] for i in range(len(indices))}
+        result = np.zeros((len(indices),len(indices)),dtype = np.int8)
+        for i in range(len(indices)):
+            for j in range(len(indices)):
+                result[i][j] = bigMatrix[resultdictionary[i],resultdictionary[j]]
+        assert_true(smallMatrix,np.sort(result))
+        assert_true(dictionary,resultdictionary)
 if __name__ == '__main__':
     unittest.main()
