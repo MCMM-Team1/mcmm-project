@@ -344,7 +344,7 @@ class MSM(object):
                 for k in range(len(msassign[i])):
                     for m in range(len(msassign[i])):
                         tmetaredu[i,j] += self.transition_matrix[msassign[i][m],msassign[j][k]]
-    return np.divide(tmetaredu,(np.sum(tmetaredu,1)[:,None])*1.0) 
+        return np.divide(tmetaredu,(np.sum(tmetaredu,1)[:,None])*1.0) 
 
     
     def visualizeMatrix(self):
