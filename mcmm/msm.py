@@ -337,13 +337,13 @@ class MSM(object):
         return msassign
     
     def transMmetareduc(self,msassign):
-    '''Calculates the Transition-matrix of the metastable states, given the assignment-list as the return of pcca'''
-    tmetaredu=np.zeros([len(msassign),len(msassign)])
-    for i in range(len(msassign)):
-        for j in range(len(msassign)):
-            for k in range(len(msassign[i])):
-                for m in range(len(msassign[i])):
-                    tmetaredu[i,j] += self.transition_matrix[msassign[i][m],msassign[j][k]]
+        '''Calculates the Transition-matrix of the metastable states, given the assignment-list as the return of pcca'''
+        tmetaredu=np.zeros([len(msassign),len(msassign)])
+        for i in range(len(msassign)):
+            for j in range(len(msassign)):
+                for k in range(len(msassign[i])):
+                    for m in range(len(msassign[i])):
+                        tmetaredu[i,j] += self.transition_matrix[msassign[i][m],msassign[j][k]]
     return np.divide(tmetaredu,(np.sum(tmetaredu,1)[:,None])*1.0) 
 
     
