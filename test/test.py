@@ -181,17 +181,18 @@ class TestStringMethods(unittest.TestCase):
         c82 = mcmm.trajCount.slidingWindowCount(t82,1,max(t82)+1)
         c83 = mcmm.trajCount.slidingWindowCount(t83,1,max(t83)+1)
         c84 = mcmm.trajCount.slidingWindowCount(t84,1,max(t84)+1)
+
         assert_true(checkTolerance(t6,mcmm.countmatrixTransitionmatrix.nonrevTmatrix(c61),tolerance))
         assert_true(checkTolerance(t6,mcmm.countmatrixTransitionmatrix.nonrevTmatrix(c62),tolerance))
         assert_true(checkTolerance(t6,mcmm.countmatrixTransitionmatrix.nonrevTmatrix(c63),tolerance))
-        
         
         
         assert_true(checkTolerance(t7,mcmm.countmatrixTransitionmatrix.nonrevTmatrix(c71),tolerance))
         assert_true(checkTolerance(t7,mcmm.countmatrixTransitionmatrix.nonrevTmatrix(c72),tolerance))
         assert_true(checkTolerance(t7,mcmm.countmatrixTransitionmatrix.nonrevTmatrix(c73),tolerance))
         assert_true(checkTolerance(t7,mcmm.countmatrixTransitionmatrix.nonrevTmatrix(c74),tolerance))
-        
+
+      
         assert_true(checkTolerance(t8,mcmm.countmatrixTransitionmatrix.nonrevTmatrix(c81),tolerance))
         assert_true(checkTolerance(t8,mcmm.countmatrixTransitionmatrix.nonrevTmatrix(c82),tolerance))
         assert_true(checkTolerance(t8,mcmm.countmatrixTransitionmatrix.nonrevTmatrix(c83),tolerance))

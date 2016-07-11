@@ -25,9 +25,10 @@ class estimate(object):
     @property
     def reducedCountMatrix(self):
         if self._reducedCountMatrix is None:
+            #print("calc reduced count matrix")
             indices = mcmm.msm.findLargestCommClass(self.countMatrix)
             _dictionaryReducedMatrix = {i:indices[i] for i in range(len(indices))} #mapping between indices of original countmatrix and largest communication class
-            _reducedCountMatrix=np.zeros((len(indices),len(indices)),dtype = np.int8)
+            _reducedCountMatrix=np.zeros((len(indices),len(indices)),dtype = np.int)
             for i in range(len(indices)):
                 for j in range(len(indices)):
                     _reducedCountMatrix[i][j]= self._countMatrix[_dictionaryReducedMatrix[i]][_dictionaryReducedMatrix[j]]
@@ -36,9 +37,10 @@ class estimate(object):
     @property
     def dictionaryReducedMatrix(self):
         if self._dictionaryReducedMatrix is None:
+            #print("calc dictionary")
             indices = mcmm.msm.findLargestCommClass(self.countMatrix)
             _dictionaryReducedMatrix = {i:indices[i] for i in range(len(indices))} #mapping between indices of original countmatrix and largest communication class
-            _reducedCountMatrix=np.zeros((len(indices),len(indices)),dtype = np.int8)
+            _reducedCountMatrix=np.zeros((len(indices),len(indices)),dtype = np.int)
             for i in range(len(indices)):
                 for j in range(len(indices)):
                     _reducedCountMatrix[i][j]= self._countMatrix[_dictionaryReducedMatrix[i]][_dictionaryReducedMatrix[j]]
@@ -47,13 +49,15 @@ class estimate(object):
     @property
     def countMatrix(self):
         if self._countMatrix is None:
+             #print("calc count matrix")
              self._countMatrix = mcmm.trajCount.slidingWindowCountXL(self.disctrajectories,self.tau,self.k)
         return self._countMatrix
 
     @property
     def transitionMatrix(self):                    #transition matrix is always reduced
         if  self._transitionMatrix is None:
-             pass #create a transition matrix by using self.countMatrix
+             #print("calc trans matrix")
+             self._transitionMatrix = mcmm.countmatrixTransitionmatrix.revTmatrix(self.reducedCountMatrix)
         return  self._transitionMatrix
 
 

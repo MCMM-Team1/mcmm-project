@@ -41,12 +41,15 @@ def slidingWindowCount(traj,tau,k):
     """
     Countmatrix = np.zeros((k,k))
     T = len(traj) 
+
+    for l in range(int(T - tau)):
+        Countmatrix[int(traj[int(l)])][int(traj[int(l+tau)])]+=1
     
-    for i in range(k):
+    """for i in range(k):
         for j in range(k):
             summe = 0
             for l in range(T- tau ):
                 if traj[l] == i and traj[l+tau] == j:
                     summe +=1
-            Countmatrix[i][j] = summe
+            Countmatrix[i][j] = summe"""
     return Countmatrix

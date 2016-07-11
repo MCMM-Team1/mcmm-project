@@ -89,7 +89,7 @@ def KMeans(data,dim=2,k=100,tolerance=0.01):
             helpcounter += 1 """
     helpcounter = 0
     for c1 in range(len(data)):
-        hilfresult = np.empty(len(data[c1]))
+        hilfresult = np.empty(len(data[c1]),dtype=int)
         for c2 in range(len(data[c1])):
             hilfresult[c2] = helpme[helpcounter]
             

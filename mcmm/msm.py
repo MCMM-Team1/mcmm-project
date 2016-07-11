@@ -153,16 +153,17 @@ def impliedTimescales(trajs,lagtimes,plotboolean=True):
     eigval=np.zeros([n,len(lagtimes)])
     timescales=np.zeros([n,len(lagtimes)])
     for i in range(len(lagtimes)):
-        lag=mcmm.trajCount.slidingWindowCountXL(trajs,lagtimes[i])
+        lag=mcmm.trajCount.slidingWindowCountXL(trajs,lagtimes[i],np.max(trajs)+1)
         lag=mcmm.countmatrixTransitionmatrix.revTmatrix(lag)
         lag=mcmm.msm.MSM(lag)
-        eigval[:,i]=lag.eigvalues[1:n+1]
+        eigval[:,i]=lag.eigvalues[1:n+1] 
         for j in range(n):
-            timescales[j,i]=-1./np.log(abs(eigval[j,i]))
+            timescales[j,i]=-1./np.log(abs(eigval[j,i])) 
+        del lag
     
     if plotboolean:
         fig=plt.figure(figsize=[5,5])
-        for i in range(len(timescales[:,0])):
+        for i in range(n): ##
             plt.loglog(lagtimes,timescales[i,:],'-o')
         plt.xlabel('lag time / steps')
         plt.ylabel('timescale / steps')
@@ -243,7 +244,7 @@ def kosaraju(T):
                 Dt[j][i] = 0 #set rows of current communication class to 0
         for i in C:
             V.remove(i)
-    return np.array(CC)
+    return np.sort(np.array(CC))
 
 def findLargestCommClass(T):
     """
@@ -283,7 +284,7 @@ class MSM(object):
             sol = eigvector[:,index]
             summe = sum(sol)
             self._stationary = sol/summe
-        return self._stationary
+        return np.real(self._stationary)
     
     @property
     def eigvalues(self):

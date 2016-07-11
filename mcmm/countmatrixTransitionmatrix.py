@@ -25,5 +25,6 @@ def nonrevTmatrix(t):
         for j in range(len(t)):
             var = var + t[i][j]
         for j in range(len(t)):
-            t[i][j] = t[i][j] / var
+            if var !=0:
+                t[i][j] = t[i][j] / var
     return t
