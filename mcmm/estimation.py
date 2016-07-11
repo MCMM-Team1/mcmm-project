@@ -25,8 +25,24 @@ class estimate(object):
     @property
     def reducedCountMatrix(self):
         if self._reducedCountMatrix is None:
-            pass #calculate the reduced countmatrix as well as the dictionary that maps the small matrix to the big one
-                 #use kosaraju (from the msm class) for this
+            indices = mcmm.msm.findLargestCommClass(self.countMatrix)
+            _dictionaryReducedMatrix = {i:indices[i] for i in range(len(indices))} #mapping between indices of original countmatrix and largest communication class
+            _reducedCountMatrix=np.zeros((len(indices),len(indices)),dtype = np.int8)
+            for i in range(len(indices)):
+                for j in range(len(indices)):
+                    _reducedCountMatrix[i][j]= self._countMatrix[_dictionaryReducedMatrix[i]][_dictionaryReducedMatrix[j]]
+        return _reducedCountMatrix
+   
+    @property
+    def dictionaryReducedMatrix(self):
+        if self._dictionaryReducedMatrix is None:
+            indices = mcmm.msm.findLargestCommClass(self.countMatrix)
+            _dictionaryReducedMatrix = {i:indices[i] for i in range(len(indices))} #mapping between indices of original countmatrix and largest communication class
+            _reducedCountMatrix=np.zeros((len(indices),len(indices)),dtype = np.int8)
+            for i in range(len(indices)):
+                for j in range(len(indices)):
+                    _reducedCountMatrix[i][j]= self._countMatrix[_dictionaryReducedMatrix[i]][_dictionaryReducedMatrix[j]]
+        return _dictionaryReducedMatrix
 
     @property
     def countMatrix(self):

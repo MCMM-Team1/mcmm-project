@@ -83,13 +83,13 @@ def rawScatter(raw_data):
     
     #Format of the scatter plots
     def format_square(ax):
-	    ax.set_xlim(-2, 2)
-	    ax.set_ylim(-2, 2)
-	    ax.set_xticks([-2, -1, 0, 1, 2])
-	    ax.set_yticks([-2, -1, 0, 1, 2])
-	    ax.set_xlabel(r"$x$ / a.u.")
-	    ax.set_ylabel(r"$y$ / a.u.")
-	    ax.set_aspect('equal')
+        ax.set_xlim(-2, 2)
+        ax.set_ylim(-2, 2)
+        ax.set_xticks([-2, -1, 0, 1, 2])
+        ax.set_yticks([-2, -1, 0, 1, 2])
+        ax.set_xlabel(r"$x$ / a.u.")
+        ax.set_ylabel(r"$y$ / a.u.")
+        ax.set_aspect('equal')
 
 	
     nTraj, trajLength, nDim= np.shape(raw_data)
@@ -173,99 +173,98 @@ def impliedTimescales(trajs,lagtimes,plotboolean=True):
 
 
 def DFS(D,v,E,label = []):
-	"""
-	Depth-First-Search: Finds all vertices which are accessible from node v
+    """
+    Depth-First-Search: Finds all vertices which are accessible from node v
+
+    Parameters
+    ----------
+    D    : matrixlike, i.e list of lists
+    v    : integer, the "starting node" 
+    E    : list of discovered nodes
+    label: list of nodes which are labeled "True"
+    ----------
+
+    Return
+    ------
+    updated list E
+    ------
+    """
 	
-	Parameters
-	----------
-	D    : matrixlike, i.e list of lists
-	v    : integer, the "starting node" 
-	E    : list of discovered nodes
-	label: list of nodes which are labeled "True"
-	----------
-	
-	Return
-	------
-	updated list E
-	------
-	"""
-	
-	#label v  as discovered
-	if v in label:
-		pass
-	else:
-		label.append(v)
-		
-	#for all outgoing arcs [v,w] from v do DFS(D,w,E,label) if w is not in label 
-	for node in range(len(D[v])):
-		if node != v and D[v][node] > 0:
-			if node in label:
-				pass
-			else:
-				DFS(D,node,E,label)
-	
-	#add v to E if it is not already in E
-	if v in E:
-		pass
-	else:
-		E.append(v)
-	return E
+    #label v  as discovered
+    if v in label:
+        pass
+    else:
+        label.append(v)
+
+    #for all outgoing arcs [v,w] from v do DFS(D,w,E,label) if w is not in label 
+    for node in range(len(D[v])):
+        if node != v and D[v][node] > 0:
+            if node in label:
+                pass
+            else:
+                DFS(D,node,E,label)
+
+    #add v to E if it is not already in E
+    if v in E:
+        pass
+    else:
+        E.append(v)
+    return E
 
 
 def kosaraju(T):
-	"""
-	Generates all communication classes of a transition matrix
-	
-	Parameters
-	----------
-	T: matrixlike, i.e list of lists
-	----------
-	
-	Return
-	------
-	List of communication classes
-	------
-	"""
-	V = []
-	CC = []
-	D = list(T)
-	while len(V) < len(D):
-		v = [x for x in range(len(D)) if x not in V][0]
-		DFS(D,v,V,[])
-	Dt = np.transpose(D) # transposed matrix
-	while V != []:
-		v = V[-1]
-		C = DFS(Dt,v,[],label = []) #current communication class
-		CC.append(C) #append the current communication class to the output
-		for i in range(len(Dt)):                                                                         
-			for j in C:                                                                               
-				Dt[i][j] = 0 #set columns of current communication class to 0
-				Dt[j][i] = 0 #set rows of current communication class to 0
-		for i in C:
-			V.remove(i)
-	return CC
+    """
+    Generates all communication classes of a transition matrix
+
+    Parameters
+    ----------
+    T: matrixlike, i.e list of lists
+    ----------
+    
+    Return
+    ------
+    np array of communication classes
+    ------
+    """
+    V = []
+    CC = []
+    D = T.copy()
+    while len(V) < len(D):
+        v = [x for x in range(len(D)) if x not in V][0]
+        DFS(D,v,V,[])
+    Dt = np.transpose(D) # transposed matrix
+    while V != []:
+        v = V[-1]
+        C = DFS(Dt,v,[],label = []) #current communication class
+        CC.append(C) #append the current communication class to the output
+        for i in range(len(Dt)):                                                                         
+            for j in C:                                                                               
+                Dt[i][j] = 0 #set columns of current communication class to 0
+                Dt[j][i] = 0 #set rows of current communication class to 0
+        for i in C:
+            V.remove(i)
+    return np.array(CC)
 
 def findLargestCommClass(T):
-	"""
-	Calls kosaraju and finds the largest communication class of the transition matrix T
-	
-	Parameters
-	----------
-	T: matrixlike, i.e list of lists
-	----------
-	
-	Return
-	------
-	Largeset communication classes of T
-	------
-	"""
-	
-	classes = kosaraju(T)
-	return max(classes, key=lambda coll: len(coll)) #returns the first maximum communication class
-	
+    """
+    Calls kosaraju and finds the largest communication class of the transition matrix T
+
+    Parameters
+    ----------
+    T: matrixlike, i.e list of lists
+    ----------
+
+    Return
+    ------
+    Largeset communication classes of T
+    ------
+    """
+    
+    classes = kosaraju(T)
+    return max(classes, key=lambda coll: len(coll)) #returns the first maximum communication class
+
 
 class MSM(object):  
-	
 	
     def __init__(self,P):
         if(not checkStochasticMatrix(P)):
@@ -393,11 +392,4 @@ def checkStochasticMatrix(t):
             print(t.sum(axis=1)[i])
             return False
     return True
-  
-
-
-
-
-
-
 
