@@ -345,8 +345,8 @@ class MSM(object):
         for i in range(n):
             for j in range(n):
                 for k in range(len(msassign[i])):
-                    for m in range(len(msassign[j])):
-                        tmetaredu[i,j] += self.transition_matrix[msassign[i][m],msassign[j][k]]
+                    for m in range(len(msassign[j])): 
+                        tmetaredu[i,j] += self.transition_matrix[msassign[i][k],msassign[j][m]]
         return np.divide(tmetaredu,(np.sum(tmetaredu,1)[:,None])*1.0) 
 
     
