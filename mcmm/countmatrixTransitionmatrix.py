@@ -3,7 +3,7 @@ import numpy as np
 import mcmm
 from msmtools.analysis import is_reversible
 def revTmatrix(t):
-    guess=t / np.sum(t,1)[:,None]
+    guess=t /(np.sum(t,1)[:,None]*1.0)
     stat=mcmm.msm.MSM(guess)
     pi=stat.stationary
     x=np.zeros([len(t),len(t)])
