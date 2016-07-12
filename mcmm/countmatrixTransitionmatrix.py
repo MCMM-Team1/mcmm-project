@@ -11,9 +11,7 @@ def revTmatrix(t):
     delta=1
     for i in range(len(t)):
         x[i,:]=guess[i,:]*pi[i]
-    counter = 0
     while (delta > 1e-4):
-        counter +=1
         xold=np.copy(x)
         for i in range(len(t)):
             for j in range(len(t)):
