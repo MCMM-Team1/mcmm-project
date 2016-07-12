@@ -11,10 +11,10 @@ def revTmatrix(t):
     for i in range(len(t)):
         x[i,:]=guess[i,:]*pi[i]
     while (delta < 1e-3):
-        xold=x
+        xold=np.copy(x)
         for i in range(len(t)):
             for j in range(len(t)):
-                x[i,j]=(t[i,j]+t[j,i])/(np.sum(t,1)/np.sum(xold,1)+np.sum(t,0),np.sum(xold,0))
+                x[i,j]=(t[i,j]+t[j,i])/(np.sum(t[i,:])/np.sum(xold[i,:])+np.sum(t[j,:])/np.sum(xold[j,:]))
         delta=np.sum(abs(x-xold))
     t = np.divide(x,(np.sum(x,1)[:,None])*1.0)    
     return t
