@@ -313,21 +313,7 @@ class MSM(object):
             self._righteigvectors = eigvectors
         return self._righteigvectors
     
-    def mfptTransM(self,lagtime):
-        """Calculates Mean-First-Passage-Times-Matrix"""
-        #Source (for linear algebra): http://www.math.niu.edu/LA09/slides/neumann.pdf
-        stat=self.stationary
-        t=self.transition_matrix
-        a=np.identity(len(t))-t
-        m0=np.identity(len(t))-np.linalg.pinv(a)+np.dot(np.ones(np.shape(t)),np.identity(len(t))*np.diag(np.linalg.pinv(a)))
-        mfp=np.dot(m0,np.linalg.inv(np.identity(len(t))*stat))
-        mfp=mfp*lagtime
-        for i in range(len(t)):
-            mfp[i,i]=0.
-        return mfp
     
-    
-
     def pcca(self, numstates):
         """"Returns a list of arrays with the states assigned to a metastable state"""
         pc=_pcca(self.transition_matrix , numstates)
@@ -390,19 +376,40 @@ class MSM(object):
         plt.ylabel(r'probability')
         return plt.show()
 
-def mfptMeta(metaT,lagtime):
-    """Calculates Mean-First-Passage-Times-Matrix"""
-    #Source (for linear algebra): http://www.math.niu.edu/LA09/slides/neumann.pdf
-    m=mcmm.msm.MSM(metaT)
-    stat=m.stationary
-    t=metaT
-    a=np.identity(len(t))-t
-    m0=np.identity(len(t))-np.linalg.pinv(a)+np.dot(np.ones(np.shape(t)),np.identity(len(t))*np.diag(np.linalg.pinv(a)))
-    mfp=np.dot(m0,np.linalg.inv(np.identity(len(t))*stat))
-    mfp=mfp*lagtime
-    for i in range(len(t)):
-        mfp[i,i]=0.
-    return mfp        
+
+
+def mfptT(trans,end,tau):
+    """Calculates the mean-first-passage-time of either one or multiple states end
+    
+    Parameters
+    -----------
+    trans  : matrixlike, the transition-matrix
+    end    : int or listlike, the respective states
+    tau    : int, the lagtime
+    """
+    a=np.identity(len(trans))-trans
+    a[end,:]=0.
+    a[end,end]=1.
+    b=np.ones(len(trans))
+    b[end]=0
+    return np.linalg.solve(a,b)*tau
+
+def mfptTsets(trans,start,end,tau):
+    """Calculates the mean-first-passage-time of a set of states start to a set of states end
+        
+    Parameters
+    -----------
+    trans  : matrixlike, the transition-matrix
+    start  : int or listlike, the starting set of states
+    end    : int or listlike, the ending set of states
+    tau    : int, the lagtime
+    """
+    mc=mcmm.msm.MSM(trans)
+    stat=mc.stationary
+    startprobdist= stat[s1] /np.sum(stat[s1])
+    y=mfptT(trans,end,tau)
+    return np.dot(startprobdist,y[start])   
+
 
 def checkStochasticMatrix(t):
         
