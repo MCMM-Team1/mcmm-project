@@ -157,11 +157,11 @@ def impliedTimescales(trajs,lagtimes,plotboolean=True):
         lag=mcmm.msm.MSM(lag)
         eigval[:,i]=lag.eigvalues[1:n+1] 
         for j in range(n):
-            timescales[j,i]=-1./np.log(abs(eigval[j,i])) 
+            timescales[j,i]=lagtimes[i]*(-1.)/np.log(abs(eigval[j,i])) 
         del lag
     
     if plotboolean:
-        fig=plt.figure(figsize=[5,5])
+        fig=plt.figure(figsize=[10,5])
         for i in range(n): ##
             plt.loglog(lagtimes,timescales[i,:],'-o')
         plt.xlabel('lag time / steps')
@@ -315,7 +315,7 @@ class MSM(object):
     
     def mfptTransM(self,lagtime):
         """Calculates Mean-First-Passage-Times-Matrix"""
-        #Source: http://www.math.niu.edu/LA09/slides/neumann.pdf
+        #Source (for linear algebra): http://www.math.niu.edu/LA09/slides/neumann.pdf
         stat=self.stationary
         t=self.transition_matrix
         a=np.identity(len(t))-t
@@ -326,6 +326,8 @@ class MSM(object):
             mfp[i,i]=0.
         return mfp
     
+    
+
     def pcca(self, numstates):
         """"Returns a list of arrays with the states assigned to a metastable state"""
         pc=_pcca(self.transition_matrix , numstates)
@@ -334,15 +336,16 @@ class MSM(object):
         for i in range(len(pc[0,:])):
             msassign.append(np.where(pcmax==i)[0])
             
-        return msassign
+        return msassign,pcmax
     
-    def transMmetareduc(self,msassign):
+    def metaT(self,msassign):
         '''Calculates the Transition-matrix of the metastable states, given the assignment-list as the return of pcca'''
-        tmetaredu=np.zeros([len(msassign),len(msassign)])
-        for i in range(len(msassign)):
-            for j in range(len(msassign)):
+        n=np.shape(msassign)[0]
+        tmetaredu=np.zeros([n,n])
+        for i in range(n):
+            for j in range(n):
                 for k in range(len(msassign[i])):
-                    for m in range(len(msassign[i])):
+                    for m in range(len(msassign[j])):
                         tmetaredu[i,j] += self.transition_matrix[msassign[i][m],msassign[j][k]]
         return np.divide(tmetaredu,(np.sum(tmetaredu,1)[:,None])*1.0) 
 
@@ -386,8 +389,21 @@ class MSM(object):
         plt.xlabel(r'index of states')
         plt.ylabel(r'probability')
         return plt.show()
-        
-        
+
+def mfptMeta(metaT,lagtime):
+    """Calculates Mean-First-Passage-Times-Matrix"""
+    #Source (for linear algebra): http://www.math.niu.edu/LA09/slides/neumann.pdf
+    m=mcmm.msm.MSM(metaT)
+    stat=m.stationary
+    t=metaT
+    a=np.identity(len(t))-t
+    m0=np.identity(len(t))-np.linalg.pinv(a)+np.dot(np.ones(np.shape(t)),np.identity(len(t))*np.diag(np.linalg.pinv(a)))
+    mfp=np.dot(m0,np.linalg.inv(np.identity(len(t))*stat))
+    mfp=mfp*lagtime
+    for i in range(len(t)):
+        mfp[i,i]=0.
+    return mfp        
+
 def checkStochasticMatrix(t):
         
     """

@@ -1,6 +1,7 @@
 # here come the nonrevTmatrix(matrix count) and revTmatrix(matrix count) functions
 import numpy as np
 import mcmm
+from msmtools.analysis import is_reversible
 def revTmatrix(t):
     guess=t / np.sum(t,1)[:,None]
     stat=mcmm.msm.MSM(guess)
@@ -10,13 +11,15 @@ def revTmatrix(t):
     delta=1
     for i in range(len(t)):
         x[i,:]=guess[i,:]*pi[i]
-    while (delta > 1e-12):
+    counter = 0
+    while (delta > 1e-4):
+        counter +=1
         xold=np.copy(x)
         for i in range(len(t)):
             for j in range(len(t)):
                 x[i,j]=(t[i,j]+t[j,i])/(np.sum(t[i,:])/np.sum(xold[i,:])+np.sum(t[j,:])/np.sum(xold[j,:]))
         delta=np.sum(abs(x-xold))
-    t = np.divide(x,(np.sum(x,1)[:,None])*1.0)    
+    t = np.divide(x,(np.sum(x,1)[:,None])*1.0)
     return t
 
 def nonrevTmatrix(t):
