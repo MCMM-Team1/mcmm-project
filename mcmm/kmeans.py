@@ -4,33 +4,21 @@ from scipy import spatial
 
 #@np.vectorize
 def _computeSquareDistancesToClusters(clusters,points):
-    
-    #temppoints = np.array([points])
-    #return sp.spatial.distance.cdist(clusters,temppoints,'sqeuclidean')
+    #gets a list of clusters and a list of points, uses a vectorized scipy function which returns
+    #an array with all the squared distances.
     return sp.spatial.distance.cdist(clusters,points,'sqeuclidean')
     
-    #clusters has to be a list of points!!!
-    temp = np.zeros(len(clusters), dtype=np.float)
-    counter = 0
-    for x in clusters:
-        temp[counter] = np.linalg.norm(np.subtract(x,point))
-        counter +=1
-    return temp #np.min(np.array([(np.linalg.norm(np.subtract(x,point)) for x in clusters)]))
 
 def _initialization(traj,k):
+    #use the k++ initialisation
     distances = np.zeros(len(traj), dtype=np.float)
     r = np.random.randint(0,len(traj))
     # the r'th element is the first cluster center, chosen uniformly at random
     clusters = np.array([traj[r]], dtype=np.float)
     for l in range(1,k):
-      #  for i in range(len(traj)):
-            #distances[i]=np.min(_computeSquareDistancesToClusters(clusters,traj[i]))
         distancesmatrix=_computeSquareDistancesToClusters(clusters,traj)
-        distances = np.amin(distancesmatrix,axis = 0)
-        #print("distancesmatrix",distancesmatrix)
-        #print("distances",distances)
-        #choose next cluster point
-        nextClusterPoint = _chooseNextClusterPoint(distances)
+        distances = np.amin(distancesmatrix,axis = 0)  #returns the indices of the nearest cluster points for every data point
+        nextClusterPoint = _chooseNextClusterPoint(distances)        #choose next cluster point
         clusters = np.concatenate([clusters,np.array([traj[nextClusterPoint]])])
     return clusters
 
@@ -38,33 +26,37 @@ def KMeans(data,dim=2,k=100,tolerance=0.01):
     """
     Parameters
     ----------
-    data      : list of numpy ndarrays, list of trajectories, possibly of different lenghts
+    data      : list of numpy ndarrays, represents the list of trajectories, possibly of different lenghts
     dim       : int, the dimension of the trajectories
     k         : int, the number of clusters
     tolerance : float, defines when clusterpoints "dont change", in max-norm
    
     Return
     ------
-    distrajs : list of numpy ndarrays, list of discrete trajectories
+    distrajs : list of numpy ndarrays, represents the list of discrete trajectories
     centers : numpy ndarray, all the cluster centers
-   
-    For each trajectory in the given data, do a kmeans(++) algorithm
-    to find the clusters and output discrete trajectories.
-    Therefore call a kmeans subprocedure.
     """
+    
     superData = np.concatenate(data)
+    #do kmeans for all the data points at once
+    
     if len(superData) < k:
         k = len(superData)
         print("reduced number of cluster to the overall number of data")
-    allClusters = _initialization(superData,k)
-    #result = np.empty((len(data),len(data[0])))
-    result = []
-
+        #the number of clusters should be smaller than the number of data points
     
-    #print("initialisation done")
+    allClusters = _initialization(superData,k)
+    print("initialisation done")
+
+    result = []   #this is the list which will later contain the discrete trajectories
+    nums = 1;
     
     while True:
-        #print("entered while loop (again)")
+        if nums == 1:
+            print("entered while loop one time.")
+        else:
+            print("{} {} {}".format("entered while loop ",nums," times."))
+        nums += 1
         allClustersOld = allClusters.copy()
         helpme = np.zeros(len(superData),dtype=np.int)
         #for c in range(len(superData)):
