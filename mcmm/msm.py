@@ -127,7 +127,7 @@ def rawScatter(raw_data):
 
 
 
-def impliedTimescales(trajs,lagtimes,plotboolean=True):
+def impliedTimescales(trajs,lagtimes,k,plotboolean=True):
     """Calculates the implied timescales for different lagtimes and plots it if not set to False
     
     Parameters
@@ -152,10 +152,11 @@ def impliedTimescales(trajs,lagtimes,plotboolean=True):
     eigval=np.zeros([n,len(lagtimes)])
     timescales=np.zeros([n,len(lagtimes)])
     for i in range(len(lagtimes)):
-        lag=mcmm.trajCount.slidingWindowCountXL(trajs,lagtimes[i],np.max(trajs)+1)
-        lag=mcmm.countmatrixTransitionmatrix.revTmatrix(lag)
-        lag=mcmm.msm.MSM(lag)
-        eigval[:,i]=lag.eigvalues[1:n+1] 
+        #lag=mcmm.trajCount.slidingWindowCountXL(trajs,lagtimes[i],np.max(trajs)+1)
+        lag = mcmm.estimation.estimate(trajs,lagtimes[i],k)
+        #lag=mcmm.countmatrixTransitionmatrix.revTmatrix()
+        msmObject=mcmm.msm.MSM(lag.transitionMatrix)
+        eigval[:,i]=msmObject.eigvalues[1:n+1] 
         for j in range(n):
             timescales[j,i]=lagtimes[i]*(-1.)/np.log(abs(eigval[j,i])) 
         del lag
@@ -164,6 +165,7 @@ def impliedTimescales(trajs,lagtimes,plotboolean=True):
         fig=plt.figure(figsize=[10,5])
         for i in range(n): ##
             plt.loglog(lagtimes,timescales[i,:],'-o')
+        plt.loglog([min(lagtimes),max(lagtimes)],[min(lagtimes),max(lagtimes)],'k-',linewidth=2) 
         plt.xlabel('lag time / steps')
         plt.ylabel('timescale / steps')
         fig.tight_layout()
