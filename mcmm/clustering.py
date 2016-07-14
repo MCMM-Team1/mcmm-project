@@ -5,7 +5,7 @@ import numpy as np
 import mcmm
 
 class cluster(object):
-    def __init__(self,data,ctrs = 100,dim = 2):
+    def __init__(self,data,ctrs = 100):
         """    
         Parameters
         ----------
@@ -16,7 +16,7 @@ class cluster(object):
         ----------
         """
         self.trajectories = data
-        self.dimension = dim
+        self.dimension = len(data[0][0])
         self.numberCenters = ctrs
         self._disctrajectories = None
         self._centers = None

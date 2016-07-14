@@ -406,7 +406,7 @@ def mfptTsets(trans,start,end,tau):
     """
     mc=mcmm.msm.MSM(trans)
     stat=mc.stationary
-    startprobdist= stat[s1] /np.sum(stat[s1])
+    startprobdist= stat[start] /np.sum(stat[start])
     y=mfptT(trans,end,tau)
     return np.dot(startprobdist,y[start])   
 
