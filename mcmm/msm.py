@@ -412,7 +412,7 @@ def mfptTsets(trans,start,end,tau):
     y=mfptT(trans,end,tau)
     return np.dot(startprobdist,y[start])   
 
-def tOrdered(tMatrix, assign)
+def tOrdered(tMatrix, assign):
 
     assignTemp = np.concatenate(assign)
     bla = tMatrix
