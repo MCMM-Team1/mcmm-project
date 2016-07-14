@@ -54,15 +54,18 @@ def KMeans(data,dim=2,k=100,tolerance=0.01):
     while True:
         if nums == 1:
             print("entered while loop one time.")
+        elif nums < 10:
+            print("{} {} {}".format("entered while loop  ",nums," times."))
         else:
             print("{} {} {}".format("entered while loop ",nums," times."))
         nums += 1
-        allClustersOld = allClusters.copy()
-        helpme = np.zeros(len(superData),dtype=np.int)
-        #for c in range(len(superData)):
-         #   helpme[c] = np.argmin(_computeSquareDistancesToClusters(allClusters,superData[c]))
+        
+        allClustersOld = allClusters.copy() #store the clusters to compute the convergence criterium
+        
+        helpme = np.zeros(len(superData),dtype=np.int) #helpme will store for every data point the cluster it is assigned to.
         helpme = np.argmin(_computeSquareDistancesToClusters(allClusters,superData),axis = 0)
-        #print("helpme",helpme)
+        
+        #compute the mean of every cluster
         countSize = np.zeros(k, dtype=np.int)
         countMean = np.zeros((k,dim), dtype=np.float)
         for c in range(len(superData)):
@@ -70,15 +73,12 @@ def KMeans(data,dim=2,k=100,tolerance=0.01):
             countMean[helpme[c]] += superData[c]
         for i in range(k):
             allClusters[i] = np.multiply((1.0/countSize[i]) , countMean[i])
+            
+        #check if the clusters are close to converging (use the specified tolerance)
         if np.max(allClusters - allClustersOld) < tolerance and np.min(allClusters - allClustersOld) > (-1)*tolerance:
             break
-    """
-    helpcounter = 0
-    for c1 in range(len(data)):
-        for c2 in range(len(data[c1])):
-            result[c1][c2] = helpme[helpcounter]
-            
-            helpcounter += 1 """
+        
+    #go through the given trajectories and assign each data point to its cluster.
     helpcounter = 0
     for c1 in range(len(data)):
         hilfresult = np.empty(len(data[c1]),dtype=int)
@@ -87,15 +87,14 @@ def KMeans(data,dim=2,k=100,tolerance=0.01):
             
             helpcounter += 1
         result.append(hilfresult)
-    #_result = [result[i, :] for i in range(result.shape[0])]
-    #return (_result,allClusters)
     return (result,allClusters)
         
     
 
 def _chooseNextClusterPoint(distances):
     #distances: list of floats
-    #temp = np.array([d * d for d in distances])
+    #weighted probability distribution, choose the next cluster point with a probability
+    #proportional to the square of the distance to the existing clusters
     total = np.sum(distances)
     rand = np.random.uniform(0,total)
     result = 0
@@ -104,4 +103,5 @@ def _chooseNextClusterPoint(distances):
         if(rand < 0):
             return result
         result += 1
+    print("An error occured while trying to find the next cluster point in the initialization of kmeans.")
     return -1
