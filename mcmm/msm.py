@@ -412,6 +412,17 @@ def mfptTsets(trans,start,end,tau):
     y=mfptT(trans,end,tau)
     return np.dot(startprobdist,y[start])   
 
+def tOrdered(tMatrix, assign)
+
+    assignTemp = np.concatenate(assign)
+    bla = tMatrix
+    tOrdered = np.zeros([len(bla),len(bla)])
+
+    for i in range(len(bla)):
+        for j in range(len(bla)):
+            tOrdered[i,j] = bla[assignTemp[i],assignTemp[j]]
+    return tOrdered
+
 
 def checkStochasticMatrix(t):
         
