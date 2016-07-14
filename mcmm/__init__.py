@@ -10,3 +10,5 @@ from . import trajCount
 from . import clustering
 from . import estimation
 from . import kmeans
+from . import analysis
+
