@@ -5,7 +5,7 @@ from msmtools.analysis import pcca as _pcca
 import mcmm
 
 
-def rawTimeSeries(raw_data):
+def rawTimeSeries(raw_data,nPointsPlot = 100,nTrajPlot = 3):
     """Shows timeseries of raw data
     
     Parameters
@@ -22,19 +22,17 @@ def rawTimeSeries(raw_data):
     nTraj, trajLength, nDim= np.shape(raw_data)
 
     """Defines the number of plottet points in the time series, nPointsPlot (100 is good)"""
-    nPointsPlot = 100
     if (trajLength<nPointsPlot):
         a=1
     else: 
         a = trajLength/nPointsPlot
-
+    a = int(a)
     """Defines the number of plottet trajectories in the time series, nTrajPlot (3 is good)"""
-    nTrajPlot = 3
     if (nTraj<nTrajPlot):
         b=1
     else: 
         b = nTraj/nTrajPlot
-
+    b = int(b)
     if (nDim==3):
         '''Time series for data. '''
         fig, ax = plt.subplots(1, nDim, figsize=(nDim * 5, 5))
@@ -65,7 +63,7 @@ def rawTimeSeries(raw_data):
     return fig.tight_layout()
 
 
-def rawScatter(raw_data):
+def rawScatter(raw_data, nPointsPlot = 500):
 
     """Shows scatterplot of data
     
@@ -95,12 +93,12 @@ def rawScatter(raw_data):
 	
     """Defines the number of plottet points in the scatter plot, nPointsPlot (500 is good)"""
 
-    nPointsPlot = 500
+    
     if (trajLength<nPointsPlot):
         a=1
     else: 
         a = trajLength/nPointsPlot
-
+    a = int(a)
     if (nDim==3):
         '''Scatter plot of raw data.  For 3 dimensional data, the scatter plots are for x,y x,z and y,z.'''
         fig, ax = plt.subplots(1, nDim, figsize=(nDim * 5, 5))
