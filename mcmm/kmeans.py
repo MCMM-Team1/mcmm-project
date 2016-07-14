@@ -17,7 +17,7 @@ def _initialization(traj,k):
     clusters = np.array([traj[r]], dtype=np.float)
     for l in range(1,k):
         distancesmatrix=_computeSquareDistancesToClusters(clusters,traj)
-        distances = np.amin(distancesmatrix,axis = 0)  #returns the indices of the nearest cluster points for every data point
+        distances = np.amin(distancesmatrix,axis = 0)  #returns the distance to the nearest cluster point for every data point
         nextClusterPoint = _chooseNextClusterPoint(distances)        #choose next cluster point
         clusters = np.concatenate([clusters,np.array([traj[nextClusterPoint]])])
     return clusters
