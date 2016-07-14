@@ -9,9 +9,8 @@ class cluster(object):
         """    
         Parameters
         ----------
-        data: list of ndarrays, i.e. from mcmm.example.generate_test_data()
+        data: list of ndarrays, i.e. from mcmm.example.generate_test_data
         ctrs: integer, specifies the number of centers
-        dim : integer, specifies the dimension of the points in data
 
         ----------
         """
